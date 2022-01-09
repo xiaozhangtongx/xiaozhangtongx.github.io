@@ -1,0 +1,23 @@
+[
+  {
+    "avatar": "https://www.lixl.cn/medias/avatar.jpg",
+    "name": "悟尘记",
+    "introduction": "人生就是一场修行，上善若水，厚德载物。",
+    "url": "https://www.lixl.cn/",
+    "title": "前去参观"
+  },
+  {
+    "avatar": "https://wiki.hyperledger.org/download/attachments/2392069/fabric?version=1&modificationDate=1540928132000&api=v2",
+    "name": "Fabric",
+    "introduction": "A Blockchain Platform for the Enterprise",
+    "url": "https://hyperledger-fabric.readthedocs.io/en/master/",
+    "title": "前去学习"
+  },
+  {
+    "avatar": "https://www.bootcdn.cn/assets/img/maoyun.svg",
+    "name": "BootCDN",
+    "introduction": "稳定、快速、免费的前端开源项目 CDN 加速服务。",
+    "url": "https://www.bootcdn.cn/",
+    "title": "前去加速"
+  }
+]
