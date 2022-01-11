@@ -475,7 +475,7 @@
                 <h1 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h1><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><h3 id="1-1-什么是-Node-js？"><a href="#1-1-什么是-Node-js？" class="headerlink" title="1.1 什么是 Node.js？"></a>1.1 什么是 Node.js？</h3><p>Node.js 是一个<strong>javascript 运行环境</strong>。它让 javascript 可以开发后端程序，实现几乎其他后端语言实现的所有功能，可以与 PHP、Java、Python、.NET、Ruby 等后端语言平起平坐。</p>
 <p>Nodejs 是基于<strong>V8 引擎</strong>，V8 是 Google 发布的<strong>开源 JavaScript 引擎</strong>，本身就是用于 Chrome 浏览器的 js 解释部分，但是 Ryan Dahl 这哥们，鬼才般的，把这个 V8 搬到了服务器上，用于做服务器的软件。</p>
 <h3 id="1-2-Node-js-能干什么？"><a href="#1-2-Node-js-能干什么？" class="headerlink" title="1.2 Node.js 能干什么？"></a>1.2 Node.js 能干什么？</h3><p><img src="/../img/no1.png" alt="img"></p>
-<h3 id="1-3-学习目标："><a href="#1-3-学习目标：" class="headerlink" title="1.3 学习目标："></a>1.3 学习目标：</h3><ul>
+<h3 id="1-3-学习目标"><a href="#1-3-学习目标" class="headerlink" title="1.3 学习目标"></a>1.3 学习目标</h3><ul>
 <li>B/S 编程模型</li>
 <li>模块化编程</li>
 <li>Node 常用 API</li>
@@ -489,12 +489,12 @@
 <li>创建 js 文件，例如<code>hello.js</code></li>
 <li>打开终端，找到文件相应的目录，运行<code>node hello.js </code></li>
 </ol>
-<pre class=" language-js"><code class="language-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
+<pre class=" language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">)</span>
 <span class="token comment" spellcheck="true">// 输出结果</span>
 hello world
 </code></pre>
 <p><strong>注意：</strong>node.js 中没有 DOM 和 BOM，</p>
-<h3 id="2-3-文件读写"><a href="#2-3-文件读写" class="headerlink" title="2.3 文件读写"></a>2.3 文件读写</h3><pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 浏览器中的js不能读取本地的文件（没有文件操作的能力）</span>
+<h3 id="2-3-文件读写"><a href="#2-3-文件读写" class="headerlink" title="2.3 文件读写"></a>2.3 文件读写</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 浏览器中的js不能读取本地的文件（没有文件操作的能力）</span>
 <span class="token comment" spellcheck="true">// nodejs可以经行文件操作</span>
 
 <span class="token comment" spellcheck="true">// 1. 导入fs(file-system)这个包</span>
@@ -513,8 +513,110 @@ fs<span class="token punctuation">.</span><span class="token function">writeFile
   console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </code></pre>
+<h3 id="2-4-创建服务器"><a href="#2-4-创建服务器" class="headerlink" title="2.4 创建服务器"></a>2.4 创建服务器</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 1.加载http核心模块</span>
+<span class="token keyword">var</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'http'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.使用 http.createServer()创建serve实例，创建服务器</span>
+<span class="token keyword">var</span> serve <span class="token operator">=</span> http<span class="token punctuation">.</span><span class="token function">createServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> data <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    id<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    title<span class="token punctuation">:</span> <span class="token string">'hello'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    id<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    title<span class="token punctuation">:</span> <span class="token string">'xiaozhang'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true">// 3.提供数据服务： 发请求->接受请求->处理请求->发送响应</span>
+<span class="token comment" spellcheck="true">// 当客户端请求过来时，就会自动触发服务器的request事件请求，然后执行第二个参数，回调处理</span>
+<span class="token comment" spellcheck="true">// request 请求事件处理函数，需要接受两个参数</span>
+<span class="token comment" spellcheck="true">//     Request:请求对象，获取客户端发过来的信息，例如请求路径</span>
+<span class="token comment" spellcheck="true">//     Response:响应对象，给客户端发送响应的信息</span>
+serve<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'request'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/index'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 使传到客户端的数据类型为UTF-8，防止乱码的问题，charset只对字符编码，其他类型的比如图片就可以不用转换</span>
+    <span class="token comment" spellcheck="true">// text/plain为文本，text/html可以解析html部分</span>
+    response<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">'Content-type'</span><span class="token punctuation">,</span> <span class="token string">'text/plain;charset=utf-8'</span><span class="token punctuation">)</span>
+    response<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token string">'欢迎来到小张的生活馆'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/home'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 传输的值要为字符串，所以要用JSON.stringify()</span>
+    response<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'收到客户端的请求了，请求路径为: '</span> <span class="token operator">+</span> request<span class="token punctuation">.</span>url<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// response.write('要给客户端发送响应的数据')</span>
+    <span class="token comment" spellcheck="true">// write可以使用多次，但是最后一定要使用end来结束响应，否则客户端会一直处于等待状态</span>
+    response<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">'hello \n xiaozhangtongx'</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// 告诉客户端，结束响应</span>
+    response<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 4.绑定端口号，启动服务器</span>
+serve<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">9001</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'服务器启动成功'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="3-Node中的js"><a href="#3-Node中的js" class="headerlink" title="3 Node中的js"></a>3 Node中的js</h2><h3 id="3-1-核心模块"><a href="#3-1-核心模块" class="headerlink" title="3.1 核心模块"></a>3.1 核心模块</h3><ul>
+<li>官方的API文档：<a target="_blank" rel="noopener" href="http://nodejs.cn/api/">http://nodejs.cn/api/</a>     常用的API如下：</li>
+</ul>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 1.用来获取机器信息</span>
+<span class="token keyword">var</span> os <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.用来操作路径</span>
+<span class="token keyword">var</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 获取当前机器CPU的信息</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>os<span class="token punctuation">.</span><span class="token function">cpus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// memory 内存</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>os<span class="token punctuation">.</span><span class="token function">totalmem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="3-2-用户自定义模块"><a href="#3-2-用户自定义模块" class="headerlink" title="3.2 用户自定义模块"></a>3.2 用户自定义模块</h3><ul>
+<li><p><code>require</code>是一个方法，它的作用就是用来加载模块</p>
+<p>在node中，模块化加载有<strong>3种</strong>：</p>
+<p>1.commonjs规范<br>2.前端模块的规范 是Amd规范  ，代表就是requirejs，他是异步的，很多前端框架都用amd规范 如 jq angular 等<br>3.es6 用的最多</p>
+</li>
+<li><p>模块的导入和导出</p>
+<p><code>exports,require</code></p>
+<p><code>b.js</code></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> test <span class="token operator">=</span> <span class="token string">'你好小张'</span>
+
+<span class="token comment" spellcheck="true">// exports导出</span>
+exports<span class="token punctuation">.</span>test <span class="token operator">=</span> test
+
+exports<span class="token punctuation">.</span>add <span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y
+<span class="token punctuation">}</span>
+</code></pre>
+<p><code>a.js</code></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// require方法有两个作用：</span>
+<span class="token comment" spellcheck="true">//   1.加载文件并执行其中的方法</span>
+<span class="token comment" spellcheck="true">//   2.拿到加载模块导出的接口</span>
+
+<span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./b'</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 输出一个对象</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>test<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 输出“你好小张”</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 执行10+50，输出60</span>
+</code></pre>
+</li>
+</ul>
+<h3 id="3-3-IP地址和端口号"><a href="#3-3-IP地址和端口号" class="headerlink" title="3.3 IP地址和端口号"></a>3.3 IP地址和端口号</h3><p><strong>IP地址来定位计算机</strong></p>
+<p><strong>端口号来定位应用程序（所有联网通信的软件都需要端口号）</strong></p>
+<p><strong>IP地址</strong>是一个规定，现在使用的是IPv4，既由<strong>4个0-255之间的数字组成</strong>，在计算机内部存储时只需要4个字节即可。在计算机中，IP地址是分配给网卡的，每个网卡有一个唯一的IP地址，如果一个计算机有多个网卡，则该台计算机则拥有多个不同的IP地址，在同一个网络内部，IP地址不能相同。<strong>IP地址的概念类似于电话号码、身份证这样的概念</strong>。</p>
+<p>其实在网络中只能使用IP地址进行数据传输，所以在传输以前，需要把域名转换为IP，这个由称作<strong>DNS的服务器</strong>专门来完成。 所以在网络编程中，可以使用IP或域名来标识网络上的一台设备。</p>
+<p> 为了在一台设备上可以运行多个程序，人为的设计了<strong>端口(Port)<strong>的概念，类似的例子是公司内部的分机号码。规定一个设备有216个，也就是65536个端口，</strong>每个端口对应一个唯一的程序</strong>。每个网络程序，无论是客户端还是服务器端，都对应一个或多个特定的端口号。由于0-1024之间多被操作系统占用，所以<strong>实际编程时一般采用1024以后的端口号</strong>。 下面是一些常见的服务对应的端口：</p>
+<p><code>ftp：23，telnet：23，smtp：25，dns：53，http：80，https：443</code></p>
+<p>使用端口号，可以找到一台设备上唯一的一个程序。 所以如果需要和某台计算机建立连接的话，只需要知道IP地址或域名即可，但是如果想和该台计算机上的某个程序交换数据的话，还必须知道该程序使用的端口号。</p>
+<p>数据传输方式 在网络上，不管是有线传输还是无线传输，数据传输的方式有<strong>两种</strong>：</p>
+<p><strong>TCP(Transfer Control Protocol) 传输控制协议</strong>方式，该传输方式是一种<strong>稳定可靠的传送方式</strong>，类似于现实中的打电话。只需要建立一次连接，就可以多次传输数据。就像电话只需要拨一次号，就可以实现一直通话一样，如果你说的话不清楚，对方会要求你重复，保证传输的数据可靠。 使用该种方式的<strong>优点是稳定可靠，缺点是建立连接和维持连接的代价高，传输速度不快</strong>。</p>
+<p><strong>UDP(User Datagram Protocol) 用户数据报协议</strong>方式，该传输方式不建立稳定的连接，类似于发短信息。每次发送数据都直接发送。发送多条短信，就需要多次输入对方的号码。该传输方式不可靠，数据有可能收不到，系统只保证尽力发送。 使用该种方式的<strong>优点是开销小，传输速度快，缺点是数据有可能会丢失</strong>。   </p>
 <hr>
-<p>2022 年 1 月 10 日更新</p>
+<p>2022 年 1 月 11 日更新</p>
 
                 
             </div>
@@ -754,18 +856,17 @@ fs<span class="token punctuation">.</span><span class="token function">writeFile
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/01/10/NodeJs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+                <a href="/2022/01/11/Vue%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="NodeJs学习笔记">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Vue项目代码规范">
                         
-                        <span class="card-title">NodeJs学习笔记</span>
+                        <span class="card-title">Vue项目代码规范</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -775,9 +876,9 @@ fs<span class="token punctuation">.</span><span class="token function">writeFile
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-10
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-11
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -786,7 +887,6 @@ fs<span class="token punctuation">.</span><span class="token function">writeFile
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -794,8 +894,8 @@ fs<span class="token punctuation">.</span><span class="token function">writeFile
                         <span class="chip bg-color">前端</span>
                     </a>
                     
-                    <a href="/tags/NodeJs/">
-                        <span class="chip bg-color">NodeJs</span>
+                    <a href="/tags/Vue/">
+                        <span class="chip bg-color">Vue</span>
                     </a>
                     
                 </div>
