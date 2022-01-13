@@ -579,7 +579,9 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <p>1.commonjs规范<br>2.前端模块的规范 是Amd规范  ，代表就是requirejs，他是异步的，很多前端框架都用amd规范 如 jq angular 等<br>3.es6 用的最多</p>
 </li>
 <li><p>模块的导入和导出</p>
-<p><code>exports,require</code></p>
+<blockquote>
+<p>exports,require</p>
+</blockquote>
 <p><code>b.js</code></p>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> test <span class="token operator">=</span> <span class="token string">'你好小张'</span>
 
@@ -605,21 +607,31 @@ console<span class="token punctuation">.</span><span class="token function">log<
 </code></pre>
 </li>
 </ul>
-<h3 id="3-3-IP地址和端口号"><a href="#3-3-IP地址和端口号" class="headerlink" title="3.3 IP地址和端口号"></a>3.3 IP地址和端口号</h3><p><strong>IP地址来定位计算机</strong></p>
+<h2 id="4-web服务器"><a href="#4-web服务器" class="headerlink" title="4 web服务器"></a>4 web服务器</h2><h3 id="4-1-IP地址和端口号"><a href="#4-1-IP地址和端口号" class="headerlink" title="4.1 IP地址和端口号"></a>4.1 IP地址和端口号</h3><p><strong>IP地址来定位计算机</strong></p>
 <p><strong>端口号来定位应用程序（所有联网通信的软件都需要端口号）</strong></p>
 <p><strong>IP地址</strong>是一个规定，现在使用的是IPv4，既由<strong>4个0-255之间的数字组成</strong>，在计算机内部存储时只需要4个字节即可。在计算机中，IP地址是分配给网卡的，每个网卡有一个唯一的IP地址，如果一个计算机有多个网卡，则该台计算机则拥有多个不同的IP地址，在同一个网络内部，IP地址不能相同。<strong>IP地址的概念类似于电话号码、身份证这样的概念</strong>。</p>
 <p>其实在网络中只能使用IP地址进行数据传输，所以在传输以前，需要把域名转换为IP，这个由称作<strong>DNS的服务器</strong>专门来完成。 所以在网络编程中，可以使用IP或域名来标识网络上的一台设备。</p>
 <p> 为了在一台设备上可以运行多个程序，人为的设计了<strong>端口(Port)<strong>的概念，类似的例子是公司内部的分机号码。规定一个设备有216个，也就是65536个端口，</strong>每个端口对应一个唯一的程序</strong>。每个网络程序，无论是客户端还是服务器端，都对应一个或多个特定的端口号。由于0-1024之间多被操作系统占用，所以<strong>实际编程时一般采用1024以后的端口号</strong>。 下面是一些常见的服务对应的端口：</p>
-<p><code>ftp：23，telnet：23，smtp：25，dns：53，http：80，https：443</code></p>
+<blockquote>
+<p>ftp：23，telnet：23，smtp：25，dns：53，http：80，https：443</p>
+</blockquote>
 <p>使用端口号，可以找到一台设备上唯一的一个程序。 所以如果需要和某台计算机建立连接的话，只需要知道IP地址或域名即可，但是如果想和该台计算机上的某个程序交换数据的话，还必须知道该程序使用的端口号。</p>
 <p>数据传输方式 在网络上，不管是有线传输还是无线传输，数据传输的方式有<strong>两种</strong>：</p>
 <p><strong>TCP(Transfer Control Protocol) 传输控制协议</strong>方式，该传输方式是一种<strong>稳定可靠的传送方式</strong>，类似于现实中的打电话。只需要建立一次连接，就可以多次传输数据。就像电话只需要拨一次号，就可以实现一直通话一样，如果你说的话不清楚，对方会要求你重复，保证传输的数据可靠。 使用该种方式的<strong>优点是稳定可靠，缺点是建立连接和维持连接的代价高，传输速度不快</strong>。</p>
 <p><strong>UDP(User Datagram Protocol) 用户数据报协议</strong>方式，该传输方式不建立稳定的连接，类似于发短信息。每次发送数据都直接发送。发送多条短信，就需要多次输入对方的号码。该传输方式不可靠，数据有可能收不到，系统只保证尽力发送。 使用该种方式的<strong>优点是开销小，传输速度快，缺点是数据有可能会丢失</strong>。</p>
-<h2 id="4-模板引擎-art-template-感觉已经过时了"><a href="#4-模板引擎-art-template-感觉已经过时了" class="headerlink" title="4 模板引擎 art-template(感觉已经过时了)"></a>4 模板引擎 <a target="_blank" rel="noopener" href="http://aui.github.io/art-template/zh-cn">art-template</a>(感觉已经过时了)</h2><p>  官方文档：<a target="_blank" rel="noopener" href="http://aui.github.io/art-template/zh-cn/docs/">介绍 - art-template (aui.github.io)</a></p>
-<h3 id="4-1-简介"><a href="#4-1-简介" class="headerlink" title="4.1 简介"></a>4.1 简介</h3><p>art-template 是一个简约、超快的模板引擎。它采用作用域预声明的技术来优化模板渲染速度，从而获得接近 JavaScript 极限的运行性能，并且同时支持 NodeJS 和浏览器</p>
-<h3 id="4-2-安装"><a href="#4-2-安装" class="headerlink" title="4.2 安装"></a>4.2 安装</h3><p><code>npm install art-template --save</code></p>
-<h2 id="5-模块系统"><a href="#5-模块系统" class="headerlink" title="5 模块系统"></a>5 模块系统</h2><p>Node开启的服务器是黑盒子，所有的资源都不允许用户访问。</p>
-<h3 id="5-1-服务端渲染与客户端渲染"><a href="#5-1-服务端渲染与客户端渲染" class="headerlink" title="5.1 服务端渲染与客户端渲染"></a>5.1 服务端渲染与客户端渲染</h3><ul>
+<h3 id="4-2-模板引擎-art-template-感觉已经过时了"><a href="#4-2-模板引擎-art-template-感觉已经过时了" class="headerlink" title="4.2 模板引擎 art-template(感觉已经过时了)"></a>4.2 模板引擎 <a target="_blank" rel="noopener" href="http://aui.github.io/art-template/zh-cn">art-template</a>(感觉已经过时了)</h3><p>  官方文档：<a target="_blank" rel="noopener" href="http://aui.github.io/art-template/zh-cn/docs/">介绍 - art-template (aui.github.io)</a></p>
+<ul>
+<li> <strong>简介</strong></li>
+</ul>
+<p>art-template 是一个简约、超快的模板引擎。它采用作用域预声明的技术来优化模板渲染速度，从而获得接近 JavaScript 极限的运行性能，并且同时支持 NodeJS 和浏览器</p>
+<ul>
+<li><strong>安装</strong></li>
+</ul>
+<blockquote>
+<p>npm install art-template –save</p>
+</blockquote>
+<h3 id="4-3-服务端渲染与客户端渲染"><a href="#4-3-服务端渲染与客户端渲染" class="headerlink" title="4.3 服务端渲染与客户端渲染"></a>4.3 服务端渲染与客户端渲染</h3><p>Node开启的服务器是黑盒子，所有的资源都不允许用户访问。</p>
+<ul>
 <li><p><strong>客户端渲染：</strong>至少向服务器请求<strong>两次</strong>，类似于学校教务的系统 <a target="_blank" rel="noopener" href="http://sso.jwc.whut.edu.cn/Certification/login.do">http://sso.jwc.whut.edu.cn/Certification/login.do</a></p>
 <p><img src="/../img/v2-5a6d1ffb507b3db3fb468ded6a55ad75_r-16419748445572.jpg" alt="preview"></p>
 </li>
@@ -628,8 +640,196 @@ console<span class="token punctuation">.</span><span class="token function">log<
 </li>
 </ul>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/171579801">https://zhuanlan.zhihu.com/p/171579801</a></p>
-<hr>
-<p>2022 年 1 月 12 日更新</p>
+<h2 id="5-模块系统"><a href="#5-模块系统" class="headerlink" title="5 模块系统"></a>5 模块系统</h2><h3 id="5-1-什么是模块化"><a href="#5-1-什么是模块化" class="headerlink" title="5.1 什么是模块化"></a>5.1 什么是模块化</h3><p>在NodeJs中，应用由模块组成，nodejs中采用commonJS模块规范。</p>
+<ul>
+<li><p>一个js文件就是一个<strong>模块</strong></p>
+</li>
+<li><p>每个模块都是一个独立的<strong>作用域</strong>，在这个而文件中定义的<strong>变量、函数、对象都是私有的</strong>，对其他文件不可见。</p>
+</li>
+</ul>
+<h3 id="5-2-CommonJS模规范"><a href="#5-2-CommonJS模规范" class="headerlink" title="5.2 CommonJS模规范"></a>5.2 CommonJS模规范</h3><h4 id="5-2-1-加载require"><a href="#5-2-1-加载require" class="headerlink" title="5.2.1 加载require"></a>5.2.1 加载<code>require</code></h4><p>语法：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> 自定义变量 <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'模块名称'</span><span class="token punctuation">)</span>
+</code></pre>
+<p>两个作用：</p>
+<ul>
+<li>执行被加载模块中的代码</li>
+<li>得到被加载模块中的<code>exports</code>导出接口对象</li>
+</ul>
+<h4 id="5-2-2-导出exports"><a href="#5-2-2-导出exports" class="headerlink" title="5.2.2 导出exports"></a>5.2.2 导出<code>exports</code></h4><p>语法：</p>
+<ul>
+<li><p><strong>导出多个成员</strong>（必须在对象中）</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 导出数字</span>
+exports<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token number">123</span>
+
+<span class="token comment" spellcheck="true">// 导出函数</span>
+exports<span class="token punctuation">.</span>add <span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 导出对象</span>
+exports<span class="token punctuation">.</span>obj <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token string">'xiaozhangtongx'</span><span class="token punctuation">,</span>
+  age<span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
+  hobby<span class="token punctuation">:</span> <span class="token string">'code'</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li><p><strong>导出单个成员</strong>（拿到的就是：函数和字符串）</p>
+<pre class=" language-javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token string">'hello'</span>
+
+<span class="token comment" spellcheck="true">// 注意若有多个module.exports，后者会覆盖前者</span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> x <span class="token operator">+</span> y
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+<h4 id="5-2-3-导出原理解析"><a href="#5-2-3-导出原理解析" class="headerlink" title="5.2.3 导出原理解析"></a>5.2.3 导出原理解析</h4><p><code>exports</code>是<code>module.exports</code>的一个引用</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 无效</span>
+exports <span class="token operator">=</span> <span class="token string">'tongxue'</span>
+
+<span class="token comment" spellcheck="true">// 有效</span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token string">'tongxue'</span>
+
+<span class="token comment" spellcheck="true">// 有效 exports重新建立与module.exports的联系</span>
+exports <span class="token operator">=</span> module<span class="token punctuation">.</span>exports
+</code></pre>
+<pre class=" language-javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>module<span class="token punctuation">.</span>exports <span class="token operator">===</span> exports<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 输出为true</span>
+<span class="token comment" spellcheck="true">// 为了书写方便，通常在导出多个成员的时候直接用exports</span>
+<span class="token comment" spellcheck="true">// 而我们在return的时候，return的是module.exports不是exports</span>
+<span class="token comment" spellcheck="true">// 所以如果给module.exports重新赋值就不会被覆盖，如果没有重新赋值就会被覆盖return最后的那个成员</span>
+</code></pre>
+<pre class=" language-javascript"><code class="language-javascript">exports<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token string">'xiaozhang'</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token string">'tongxue'</span>
+<span class="token comment" spellcheck="true">// 输出结果为: tongxue</span>
+<span class="token comment" spellcheck="true">// 原因解释：而我们在return的时候，return的是module.exports不是exports</span>
+</code></pre>
+<h4 id="5-4-require方法加载规则"><a href="#5-4-require方法加载规则" class="headerlink" title="5.4 require方法加载规则"></a>5.4 require方法加载规则</h4><ul>
+<li><p>优先从缓存中加载</p>
+<p><img src="/../img/image-20220113091101624.png" alt="image-20220113091101624"></p>
+<p>输出的结果</p>
+<blockquote>
+<p>a.js被加载了<br>b.js被加载了</p>
+</blockquote>
+<p>由于在a.js里面已经加载了b,所以输出的的时候就<strong>不会重复加载</strong>，但是可以<strong>拿到重复加载的对象</strong></p>
+</li>
+<li><p>判断模块标识符</p>
+</li>
+</ul>
+<h3 id="5-3-npm"><a href="#5-3-npm" class="headerlink" title="5.3 npm"></a>5.3 npm</h3><blockquote>
+<p>npm install // 安装package.json定义好的模块，简写 npm i</p>
+<p>// 安装包指定模块<br>npm i <ModuleName></ModuleName></p>
+<p>// 全局安装<br>npm i <ModuleName> -g </ModuleName></p>
+<p>// 安装包的同时，将信息写入到package.json中的 dependencies 配置中<br>npm i <ModuleName> –save</ModuleName></p>
+<p>// 安装包的同时，将信息写入到package.json中的 devDependencies 配置中<br>npm i <ModuleName> –save-dev</ModuleName></p>
+<p>// 安装多模块<br>npm i <ModuleName1> <ModuleName2></ModuleName2></ModuleName1></p>
+<p>// 安装方式参数：<br>-save // 简写-S，加入到生产依赖中<br>-save-dev // 简写-D，加入到开发依赖中<br>-g // 全局安装 将安装包放在 /usr/local 下或者你 node 的安装目录</p>
+</blockquote>
+<p>npm详细命令可参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43740362/article/details/118686494">https://blog.csdn.net/qq_43740362/article/details/118686494</a></p>
+<h2 id="6-Express"><a href="#6-Express" class="headerlink" title="6 Express"></a>6 Express</h2><p>Express 是一个简洁而灵活的 node.js Web应用框架, 提供了一系列强大特性帮助你创建各种 Web 应用，和丰富的 HTTP 工具。</p>
+<p>使用 Express 可以快速地搭建一个完整功能的网站。</p>
+<blockquote>
+<p>官网链接：<a target="_blank" rel="noopener" href="http://expressjs.com/">http://expressjs.com/</a></p>
+</blockquote>
+<p>Express 框架核心特性：</p>
+<ul>
+<li>可以设置中间件来响应 HTTP 请求</li>
+<li>定义了路由表用于执行不同的 HTTP 请求动作</li>
+<li>可以通过向模板传递参数来动态渲染 HTML 页面</li>
+</ul>
+<h3 id="6-1-初识Express"><a href="#6-1-初识Express" class="headerlink" title="6.1 初识Express"></a>6.1 初识Express</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 0.安装</span>
+<span class="token comment" spellcheck="true">// cnpm install express --save</span>
+<span class="token comment" spellcheck="true">// 1.导包</span>
+<span class="token keyword">var</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2. 创建web服务器应用,类似与原来的http.createServer()</span>
+<span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 公开指定目录</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/public/'</span><span class="token punctuation">,</span> express<span class="token punctuation">.</span><span class="token keyword">static</span><span class="token punctuation">(</span><span class="token string">'./public/'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 当服务器收到get请求/时执行某个操作</span>
+<span class="token comment" spellcheck="true">// 返回一个字符串</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'hello express'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 返回一个页面(服务端渲染)</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/home'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`
+  &lt;!DOCTYPE html>
+&lt;html lang="en">
+  &lt;head>
+    &lt;meta charset="UTF-8" />
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    &lt;title>Document&lt;/title>
+  &lt;/head>
+  &lt;body>
+    &lt;h2>xiaozhang&lt;/h2>
+    &lt;img src="./public/img/01.jpg" alt="" />
+  &lt;/body>
+&lt;/html>
+  `</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 相当于server.listen</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'app is running'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>为了实现热部署的效果，可以使用<code>nodemon</code>这个热部工具</p>
+<p>nodemon用来监视node.js应用程序中的任何更改并自动重启服务,非常适合用在开发环境中。</p>
+<blockquote>
+<p>// 全局安装</p>
+<p>npm install -g nodemon</p>
+<p>// 启动项目</p>
+<p>nodemon [your node app]</p>
+</blockquote>
+<h3 id="6-2-基本路由"><a href="#6-2-基本路由" class="headerlink" title="6.2 基本路由"></a>6.2 基本路由</h3><p>Node.js 路由(router) 提供了 URL 请求路径到 Node.js 方法的一一<strong>映射机制</strong></p>
+<p>我们可以解析 HTTP 请求的 URL ，从 URL 中提取出请求的路径以及 GET/POST 参数</p>
+<p>Node.js Web 应用程序所有的请求数据都被封装在 request 对象中，该对象作为 onRequest() 回调函数的第一个参数传递</p>
+<p>我们可以使用 Node.js <strong>url</strong> 模块和 <strong>querystring</strong> 第三方模块来解析这些请求参数 :</p>
+<ol>
+<li>Node.js <strong>url</strong> 模块可以解析 URL 参数信息</li>
+<li><strong>querystring</strong> 可以解析 POST 请求中放在 body(请求体中的参数)</li>
+</ol>
+<p><strong>URL解析</strong></p>
+<pre class=" language-http"><code class="language-http">                              url.parse(string).query
+                                           |
+           url.parse(string).pathname      |
+                       |                   |
+                       |                   |
+                     ------ -------------------
+<span class="token header-name keyword">http:</span>//localhost:8080/ss?name=twle&amp;hello=world
+                              ----       -----
+                                |          |
+                                |          |
+querystring.parse(queryString)["name"]     |
+                                           |
+          querystring.parse(queryString)["hello"]
+</code></pre>
+<h3 id="6-3-静态服务"><a href="#6-3-静态服务" class="headerlink" title="6.3 静态服务"></a>6.3 静态服务</h3><p>通常在<code>public</code>子文件夹中包含图像，CSS等，然后将其公开到根目录：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 静态服务,如果第一个为'/'可以直接用</span>
+<span class="token comment" spellcheck="true">// app.use(express.static('./public/'))</span>
+<span class="token comment" spellcheck="true">// 通用</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/public'</span><span class="token punctuation">,</span> express<span class="token punctuation">.</span><span class="token keyword">static</span><span class="token punctuation">(</span><span class="token string">'./public/'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/home'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'hello'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'app is serve...'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>2022 年 1 月 13 日更新</p>
 
                 
             </div>
