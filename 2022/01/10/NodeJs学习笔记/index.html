@@ -829,7 +829,85 @@ app<span class="token punctuation">.</span><span class="token function">listen</
   console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'app is serve...'</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </code></pre>
-<p>2022 年 1 月 13 日更新</p>
+<h3 id="6-4-配置模板引擎"><a href="#6-4-配置模板引擎" class="headerlink" title="6.4 配置模板引擎"></a>6.4 配置模板引擎</h3><h4 id="6-4-1-安装"><a href="#6-4-1-安装" class="headerlink" title="6.4.1 安装"></a>6.4.1 安装</h4><pre class=" language-shell"><code class="language-shell">npm install --save art-template
+npm install --save express-art-template
+</code></pre>
+<h4 id="6-4-2-使用"><a href="#6-4-2-使用" class="headerlink" title="6.4.2 使用"></a>6.4.2 使用</h4><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 配置使用art-template模板引擎</span>
+app<span class="token punctuation">.</span><span class="token function">engine</span><span class="token punctuation">(</span><span class="token string">'html'</span><span class="token punctuation">,</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express-art-template'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// express 为response响应对象提供了一个方法：render</span>
+<span class="token comment" spellcheck="true">// 当配置了模板引擎的时候，render就可以使用了</span>
+<span class="token comment" spellcheck="true">// render使用方法就是 res.render('html模板'，{模板数据})</span>
+<span class="token comment" spellcheck="true">// 第一个参数必须是views下的文件</span>
+
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/admin'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'admin/index.html'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'xiaozhangtx'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h4 id="6-4-3-获取post请求体数据"><a href="#6-4-3-获取post请求体数据" class="headerlink" title="6.4.3 获取post请求体数据"></a>6.4.3 获取post请求体数据</h4><blockquote>
+<p><strong>req.query 只能用在get请求中</strong></p>
+<p>在Express缺少一个模块，所以要引入express的中间件 <code>body-parser</code></p>
+</blockquote>
+<ul>
+<li><p><strong>安装</strong></p>
+<pre class=" language-shell"><code class="language-shell">npm install --save body-parser
+</code></pre>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://expressjs.com/en/resources/middleware/body-parser.html"><strong>配置</strong></a></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> bodyParser <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'body-parser'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// parse application/x-www-form-urlencoded</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>bodyParser<span class="token punctuation">.</span><span class="token function">urlencoded</span><span class="token punctuation">(</span><span class="token punctuation">{</span> extended<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// parse application/json</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>bodyParser<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">'Content-Type'</span><span class="token punctuation">,</span> <span class="token string">'text/plain'</span><span class="token punctuation">)</span>
+  res<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">'you posted:\n'</span><span class="token punctuation">)</span>
+  res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+</ul>
+<h4 id="6-4-4-路由模块的设计"><a href="#6-4-4-路由模块的设计" class="headerlink" title="6.4.4 路由模块的设计"></a>6.4.4 路由模块的设计</h4><p><code>router.js</code></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 1.导入express</span>
+<span class="token keyword">var</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.创建路由容器</span>
+<span class="token keyword">var</span> router <span class="token operator">=</span> express<span class="token punctuation">.</span><span class="token function">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 3.把路由都挂载到router这个路由容器中</span>
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/student'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  fs<span class="token punctuation">.</span><span class="token function">readFile</span><span class="token punctuation">(</span><span class="token string">'./db.json'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>error<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'文件读取错误'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>JSON<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 4.导出router容器</span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> router
+</code></pre>
+<p><code>app.js</code></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 导入router.js</span>
+<span class="token keyword">var</span> router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./router'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 把路由都挂载到app中</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">)</span>
+</code></pre>
+<p>2022 年 1 月 16日更新</p>
 
                 
             </div>
