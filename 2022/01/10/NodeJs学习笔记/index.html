@@ -905,9 +905,81 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token comment" spellcheck="true">// 把路由都挂载到app中</span>
-app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">)</span>    
 </code></pre>
-<p>2022 年 1 月 16日更新</p>
+<h2 id="7-MongoDB"><a href="#7-MongoDB" class="headerlink" title="7 MongoDB"></a>7 <a target="_blank" rel="noopener" href="https://www.runoob.com/mongodb/mongodb-tutorial.html">MongoDB</a></h2><p>MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。</p>
+<h3 id="7-1-NoSQL"><a href="#7-1-NoSQL" class="headerlink" title="7.1 NoSQL"></a>7.1 NoSQL</h3><p>NoSQL(NoSQL = Not Only SQL )，意即”不仅仅是SQL”。在现代的计算系统上每天网络上都会产生庞大的数据量。这些数据有很大一部分是由关系数据库管理系统（RDBMS）来处理。 1970年 E.F.Codd’s提出的关系模型的论文 “A relational model of data for large shared data banks”，这使得数据建模和应用程序编程更加简单。通过应用实践证明，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它是结构化数据存储在网络和商务应用的主导技术。</p>
+<h3 id="7-2-安装"><a href="#7-2-安装" class="headerlink" title="7.2 安装"></a>7.2 安装</h3><blockquote>
+<p>可以参考菜鸟教程，链接：<a target="_blank" rel="noopener" href="https://www.runoob.com/mongodb/mongodb-window-install.html">https://www.runoob.com/mongodb/mongodb-window-install.html</a></p>
+</blockquote>
+<h3 id="7-3-Node中使用"><a href="#7-3-Node中使用" class="headerlink" title="7.3 Node中使用"></a>7.3 Node中使用</h3><h4 id="7-3-1-导入mongodb"><a href="#7-3-1-导入mongodb" class="headerlink" title="7.3.1 导入mongodb"></a>7.3.1 导入mongodb</h4><blockquote>
+<p>为了导入方便，这里使用了一个依赖包mongoose</p>
+<p><strong>mongoose简介：</strong></p>
+<p>中文网链接：<a target="_blank" rel="noopener" href="http://mongoosejs.net/">http://mongoosejs.net/</a></p>
+<p>Mongoose 是一个让我们可以通过Node来操作MongoDB数据库的一个模块<br>Mongoose 是一个对象文档模型（ODM）库，它是对Node原生的MongoDB模块进行了进一步的优化封装<br>大多数情况下，他被用来把结构化的模式应用到一个MongoDB集合，并提供了验证和类型装换等好处<br>基于MongoDB驱动，通过关系型数据库的思想来实现非关系型数据库</p>
+</blockquote>
+<ul>
+<li><p>mongoose官网例子</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> mongoose <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'mongoose'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> Schema <span class="token operator">=</span> mongoose<span class="token punctuation">.</span>Schema
+<span class="token comment" spellcheck="true">//连接数据库</span>
+mongoose<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token string">'mongodb://localhost/student'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  useNewUrlParser<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">//监听数据库连接状态</span>
+mongoose<span class="token punctuation">.</span>connection<span class="token punctuation">.</span><span class="token function">once</span><span class="token punctuation">(</span><span class="token string">'open'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'数据库连接成功……'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+mongoose<span class="token punctuation">.</span>connection<span class="token punctuation">.</span><span class="token function">once</span><span class="token punctuation">(</span><span class="token string">'close'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'数据库断开……'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">//创建Schema对象（约束）</span>
+<span class="token keyword">var</span> stuSchema <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Schema</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+  age<span class="token punctuation">:</span> Number<span class="token punctuation">,</span>
+  gender<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+    <span class="token keyword">default</span><span class="token punctuation">:</span> <span class="token string">'male'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  addr<span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">//将stuSchema映射到一个MongoDB collection并定义这个文档的构成</span>
+<span class="token keyword">var</span> stuModle <span class="token operator">=</span> mongoose<span class="token punctuation">.</span><span class="token function">model</span><span class="token punctuation">(</span><span class="token string">'student'</span><span class="token punctuation">,</span> stuSchema<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">//向student数据库中插入数据</span>
+stuModle<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'小明'</span><span class="token punctuation">,</span>
+    age<span class="token punctuation">:</span> <span class="token string">'20'</span><span class="token punctuation">,</span>
+    addr<span class="token punctuation">:</span> <span class="token string">'天津'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span>err<span class="token punctuation">,</span> docs<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'插入成功'</span> <span class="token operator">+</span> docs<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code></pre>
+</li>
+</ul>
+<h4 id="7-3-2-增添数据"><a href="#7-3-2-增添数据" class="headerlink" title="7.3.2 增添数据"></a>7.3.2 增添数据</h4><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//向student数据库中插入数据</span>
+stuModle<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    name<span class="token punctuation">:</span> <span class="token string">'小明'</span><span class="token punctuation">,</span>
+    age<span class="token punctuation">:</span> <span class="token string">'20'</span><span class="token punctuation">,</span>
+    addr<span class="token punctuation">:</span> <span class="token string">'天津'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span>err<span class="token punctuation">,</span> docs<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'插入成功'</span> <span class="token operator">+</span> docs<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code></pre>
+<h4 id="7-3-3-查看数据"><a href="#7-3-3-查看数据" class="headerlink" title="7.3.3 查看数据"></a>7.3.3 查看数据</h4><h4 id="7-3-4-修改数据"><a href="#7-3-4-修改数据" class="headerlink" title="7.3.4 修改数据"></a>7.3.4 修改数据</h4><h4 id="7-3-5-删除数据"><a href="#7-3-5-删除数据" class="headerlink" title="7.3.5 删除数据"></a>7.3.5 删除数据</h4><p>2022 年 1 月 17 日更新                                                     </p>
 
                 
             </div>
@@ -1358,8 +1430,7 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
 
 
     <footer class="page-footer bg-color">
-    
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+   <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
 <style>
     .aplayer .aplayer-lrc p {
         
@@ -1411,42 +1482,52 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
 
 <script src="/libs/aplayer/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            
-                <span id="year">2019-2022</span>
-            
-            <span id="year">2019</span>
-            <a href="/about" target="_blank">xiaozhangtongx</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
+ 
+  <div
+    class="container row center-align"
+    style="margin-bottom: 0px !important;"
+  >
+    <div class="col s12 m8 l8 copy-right">
+      Copyright&nbsp;&copy; 
+      <span id="year"
+        >2019-2022</span
+      >
+      
+      <span id="year">2019</span>
+      <a href="/about" target="_blank"
+        >xiaozhangtongx</a
+      >
+      |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+      |&nbsp;Theme&nbsp;<a
+        href="https://github.com/blinkfox/hexo-theme-matery"
+        target="_blank"
+        >Matery</a
+      >
+      <br />
+           
+      <span id="busuanzi_container_site_pv">
+        |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span
+          id="busuanzi_value_site_pv"
+          class="white-color"
+        ></span
+        >&nbsp;次
+      </span>
+       
+      <span id="busuanzi_container_site_uv">
+        |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span
+          id="busuanzi_value_site_uv"
+          class="white-color"
+        ></span
+        >&nbsp;人
+      </span>
+      
+      <br />
+      
+      <br />
+      
+    </div>
+    <div class="col s12 m4 l4 social-link social-statis">
+      
     <a href="https://github.com/xiaozhangtongx" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
@@ -1481,8 +1562,9 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
 
 
 
-</div>
+
     </div>
+  </div>
 </footer>
 
 <div class="progress-bar"></div>
