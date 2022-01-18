@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>hexo域名绑定遇到的一些问题</title>
+      <link href="/2022/01/18/hexo%E5%9F%9F%E5%90%8D%E7%BB%91%E5%AE%9A%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/"/>
+      <url>/2022/01/18/hexo%E5%9F%9F%E5%90%8D%E7%BB%91%E5%AE%9A%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<h1 id="hexo域名绑定遇到的一些问题"><a href="#hexo域名绑定遇到的一些问题" class="headerlink" title="hexo域名绑定遇到的一些问题"></a>hexo域名绑定遇到的一些问题</h1><p>这几天在用阿里云的时候突然发现自己之前有买过一个域名，惊奇的发现这个域名还没有使用过，抱着“反正自己在家事情也比较少，闲着也是闲着”的态度，自己打算把之前买的那个域名与之前的个人博客绑定起来，一开始本以为域名绑定是一个特别简单的活，但是身为菜鸡的我却用了差不多一天的时间才把域名搞定，总之一句话，<strong>菜呀！！！！</strong>废话不多说，上干货！！！：</p><h2 id="1-域名配置流程"><a href="#1-域名配置流程" class="headerlink" title="1 域名配置流程"></a>1 域名配置流程</h2><h3 id="1-1-域名解析"><a href="#1-1-域名解析" class="headerlink" title="1.1 域名解析"></a>1.1 域名解析</h3><p>在购买域名的提供商为域名添加解析。我是在阿里云买的域名，因此我以阿里云的为例。在域名控制台选择想要绑定的域名，并点击<strong>解析设置</strong></p><p><img src="/../img/image-20220118095024294.png" alt="image-20220118095024294"></p><h3 id="1-2-添加记录❗❗❗"><a href="#1-2-添加记录❗❗❗" class="headerlink" title="1.2 添加记录❗❗❗"></a>1.2 添加记录❗❗❗</h3><p><strong>这里有坑！！！</strong>  这里<strong>一定要先添加CNAME的记录，然后再添加a类型的记录，添加a类型的记录需要有github的IP地址</strong>，这里可以使用</p><pre class=" language-shell"><code class="language-shell">ping 你的用户名.github.io</code></pre><p>获得项目的IP，但是在网上为了不必要的麻烦，推荐把github的4个IP都加上，IP可以在<a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">github文档查看</a></p><blockquote><p>185.199.108.153<br>185.199.109.153<br>185.199.110.153<br>185.199.111.153</p></blockquote><p><img src="/../img/image-20220118095339197.png" alt="image-20220118095339197"></p><h3 id="1-3-Github设置"><a href="#1-3-Github设置" class="headerlink" title="1.3 Github设置"></a>1.3 Github设置</h3><ul><li><p>在Github中，找到托管博客的<code>xxx.github.io</code>项目，点击<code>setting</code></p><p><img src="/../img/image-20220118100609765.png" alt="image-20220118100609765"></p></li><li><p>进入到设置页面，并滑动到下方，找到<code>Pages</code>这一栏，在<code>Custom Domain</code>填上刚刚添加解析的域名并保存</p><p><img src="/../img/image-20220118100706399.png" alt="image-20220118100706399"></p></li></ul><p>如果这里没有提示报错，<strong>等待一会儿</strong>就可以使用自定义的域名访问github pages所提供的页面了。</p><h3 id="1-4-项目设置"><a href="#1-4-项目设置" class="headerlink" title="1.4 项目设置"></a>1.4 项目设置</h3><p>看了网上的一些教程，为了防止提交一次后页面404，我们需要在项目的<code>source</code>目录下新建一个名为<code>CNAME</code>的文件。❗❗<strong>这个文件没有后缀</strong>❗❗，在里面添加自己的域名</p><p><img src="/../img/image-20220118101744174.png" alt="image-20220118101744174"></p><h2 id="2-遇到的问题和解决方法"><a href="#2-遇到的问题和解决方法" class="headerlink" title="2 遇到的问题和解决方法"></a>2 遇到的问题和解决方法</h2><h3 id="2-1-域名解析"><a href="#2-1-域名解析" class="headerlink" title="2.1 域名解析"></a>2.1 域名解析</h3><p>在域名解析的时候直接先添加了a类型的记录，结果再添加CNAME类型的记录的时候给我一直报冲突。直接整傻了去网上搜也是讲的云里雾里，最后自己修改顺序，删了一些a类型的记录后就可以了，所以要只记住顺序，还有不能重复。</p><p><img src="/../img/image-20220118102148555.png" alt="image-20220118102148555"></p><h3 id="2-2-CNAME文件"><a href="#2-2-CNAME文件" class="headerlink" title="2.2 CNAME文件"></a>2.2 <code>CNAME</code>文件</h3><p>项目的<code>source</code>目录下新建一个名为<code>CNAME</code>的文件。❗❗<strong>这个文件没有后缀</strong>❗❗，在里面添加自己的域名，记住这个文件一定没有后缀！！！</p><h3 id="2-3-一定要有CNAME类型的记录"><a href="#2-3-一定要有CNAME类型的记录" class="headerlink" title="2.3 一定要有CNAME类型的记录"></a>2.3 一定要有CNAME类型的记录</h3><p>一开始我原本以为只要使用github的IP，然后把这个IP添加到a类型的记录就可以了，但是回来我发现我错了，因为IP会切换，所以还是要配置CNAME类型的记录！！！！真的的搞人心态！！！！</p><h2 id="3-其他"><a href="#3-其他" class="headerlink" title="3 其他"></a>3 其他</h2><h3 id="3-1-利用HEXO搭建个人博客"><a href="#3-1-利用HEXO搭建个人博客" class="headerlink" title="3.1 利用HEXO搭建个人博客"></a>3.1 利用HEXO搭建个人博客</h3><p>参考链接：</p><blockquote><p><a href="https://blog.csdn.net/weixin_41287260/article/details/97691962">https://blog.csdn.net/weixin_41287260/article/details/97691962</a></p></blockquote><h3 id="3-2-主题美化"><a href="#3-2-主题美化" class="headerlink" title="3.2 主题美化"></a>3.2 主题美化</h3><p>参考链接：</p><blockquote><p><a href="https://lovelijunyi.gitee.io/posts/b8ec.html">https://lovelijunyi.gitee.io/posts/b8ec.html</a></p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> HEXO </tag>
+            
+            <tag> 域名  ， </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Vue项目代码规范</title>
       <link href="/2022/01/11/Vue%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/"/>
       <url>/2022/01/11/Vue%E9%A1%B9%E7%9B%AE%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</url>
