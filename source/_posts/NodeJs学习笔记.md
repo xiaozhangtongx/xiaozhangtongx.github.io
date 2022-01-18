@@ -587,12 +587,107 @@ var router = require('./router')
 var app = express()
 
 // 把路由都挂载到app中
-app.use(router)
+app.use(router)    
 ```
 
+## 7 [MongoDB](https://www.runoob.com/mongodb/mongodb-tutorial.html)
+
+MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
+
+### 7.1 NoSQL
+
+NoSQL(NoSQL = Not Only SQL )，意即"不仅仅是SQL"。在现代的计算系统上每天网络上都会产生庞大的数据量。这些数据有很大一部分是由关系数据库管理系统（RDBMS）来处理。 1970年 E.F.Codd's提出的关系模型的论文 "A relational model of data for large shared data banks"，这使得数据建模和应用程序编程更加简单。通过应用实践证明，关系模型是非常适合于客户服务器编程，远远超出预期的利益，今天它是结构化数据存储在网络和商务应用的主导技术。
+
+### 7.2 安装
+
+> 可以参考菜鸟教程，链接：https://www.runoob.com/mongodb/mongodb-window-install.html
+
+### 7.3 Node中使用
+
+#### 7.3.1 导入mongodb
+
+>为了导入方便，这里使用了一个依赖包mongoose
+>
+>**mongoose简介：**
+>
+>中文网链接：http://mongoosejs.net/
+>
+>Mongoose 是一个让我们可以通过Node来操作MongoDB数据库的一个模块
+>Mongoose 是一个对象文档模型（ODM）库，它是对Node原生的MongoDB模块进行了进一步的优化封装
+>大多数情况下，他被用来把结构化的模式应用到一个MongoDB集合，并提供了验证和类型装换等好处
+>基于MongoDB驱动，通过关系型数据库的思想来实现非关系型数据库
+
+- mongoose官网例子
+
+  ```javascript
+  var mongoose = require('mongoose')
+  var Schema = mongoose.Schema
+  //连接数据库
+  mongoose.connect('mongodb://localhost/student', {
+    useNewUrlParser: true,
+  })
+  
+  //监听数据库连接状态
+  mongoose.connection.once('open', () => {
+    console.log('数据库连接成功……')
+  })
+  mongoose.connection.once('close', () => {
+    console.log('数据库断开……')
+  })
+  
+  //创建Schema对象（约束）
+  var stuSchema = new Schema({
+    name: String,
+    age: Number,
+    gender: {
+      type: String,
+      default: 'male',
+    },
+    addr: String,
+  })
+  
+  //将stuSchema映射到一个MongoDB collection并定义这个文档的构成
+  var stuModle = mongoose.model('student', stuSchema)
+  
+  //向student数据库中插入数据
+  stuModle.create(
+    {
+      name: '小明',
+      age: '20',
+      addr: '天津',
+    },
+    (err, docs) => {
+      if (!err) {
+        console.log('插入成功' + docs)
+      }
+    }
+  )
+  ```
+
+#### 7.3.2 增添数据
+
+```javascript
+//向student数据库中插入数据
+stuModle.create(
+  {
+    name: '小明',
+    age: '20',
+    addr: '天津',
+  },
+  (err, docs) => {
+    if (!err) {
+      console.log('插入成功' + docs)
+    }
+  }
+)
+```
+
+#### 7.3.3 查看数据
 
 
-2022 年 1 月 16日更新
 
+#### 7.3.4 修改数据
 
+#### 7.3.5 删除数据
 
+2022 年 1 月 17 日更新                                                     
