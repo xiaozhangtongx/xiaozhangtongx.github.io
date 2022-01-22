@@ -979,7 +979,54 @@ stuModle<span class="token punctuation">.</span><span class="token function">cre
   <span class="token punctuation">}</span>
 <span class="token punctuation">)</span>
 </code></pre>
-<h4 id="7-3-3-查看数据"><a href="#7-3-3-查看数据" class="headerlink" title="7.3.3 查看数据"></a>7.3.3 查看数据</h4><h4 id="7-3-4-修改数据"><a href="#7-3-4-修改数据" class="headerlink" title="7.3.4 修改数据"></a>7.3.4 修改数据</h4><h4 id="7-3-5-删除数据"><a href="#7-3-5-删除数据" class="headerlink" title="7.3.5 删除数据"></a>7.3.5 删除数据</h4><p>2022 年 1 月 17 日更新                                                     </p>
+<h4 id="7-3-3-查看数据"><a href="#7-3-3-查看数据" class="headerlink" title="7.3.3 查看数据"></a>7.3.3 查看数据</h4><h4 id="7-3-4-修改数据"><a href="#7-3-4-修改数据" class="headerlink" title="7.3.4 修改数据"></a>7.3.4 修改数据</h4><h4 id="7-3-5-删除数据"><a href="#7-3-5-删除数据" class="headerlink" title="7.3.5 删除数据"></a>7.3.5 删除数据</h4><p>详见官网</p>
+<h2 id="8-中间件"><a href="#8-中间件" class="headerlink" title="8 中间件"></a>8 <a target="_blank" rel="noopener" href="https://www.w3cschool.cn/expressapi/expressapi-using-middleware.html">中间件</a></h2><blockquote>
+<p>中间件是介于应用系统和系统软件之间的一类软件，它使用系统软件所提供的基础服务（功能），衔接网络上应用系统的<strong>各个部分</strong>或<strong>不同的应用</strong>，能够达到资源共享、功能共享的目的。对请求进行预处理</p>
+<p><strong>参考文件</strong>：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/797a4e38fe77">https://www.jianshu.com/p/797a4e38fe77</a></p>
+</blockquote>
+<h3 id="中间件的作用"><a href="#中间件的作用" class="headerlink" title="中间件的作用"></a>中间件的作用</h3><blockquote>
+<p>多个中间件之间 </p>
+</blockquote>
+<h3 id="8-1全局生效的中间件"><a href="#8-1全局生效的中间件" class="headerlink" title="8.1全局生效的中间件"></a>8.1<strong>全局生效的中间件</strong></h3><blockquote>
+<p>app.use()的作用就是注册全局的中间件</p>
+</blockquote>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">/**
+ * express中间件的实现和执行顺序
+ *
+ * Created by BadWaka on 2017/3/6.
+ */</span>
+<span class="token keyword">var</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'listen 3000...'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">middlewareA</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareA before next()'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareA after next()'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">middlewareB</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareB before next()'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareB after next()'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">middlewareC</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareC before next()'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'middlewareC after next()'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareA<span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareB<span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareC<span class="token punctuation">)</span>
+</code></pre>
+<p>输出结果<img src="/../img/image-20220122104630365.png" alt="image-20220122104630365"></p>
+<p>全局生效的中间件的简写模式：</p>
+<p>2022 年 1 月 22 日更新                                                     </p>
 
                 
             </div>
