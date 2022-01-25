@@ -1025,8 +1025,336 @@ app<span class="token punctuation">.</span><span class="token function">use</spa
 app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>middlewareC<span class="token punctuation">)</span>
 </code></pre>
 <p>输出结果<img src="/../img/image-20220122104630365.png" alt="image-20220122104630365"></p>
-<p>全局生效的中间件的简写模式：</p>
-<p>2022 年 1 月 22 日更新                                                     </p>
+<p>简洁写法:</p>
+<pre class=" language-javascript"><code class="language-javascript">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>hello<span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="8-2-局部生效的中间件"><a href="#8-2-局部生效的中间件" class="headerlink" title="8.2 局部生效的中间件"></a>8.2 局部生效的中间件</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> port <span class="token operator">=</span> <span class="token number">3000</span>
+
+<span class="token comment" spellcheck="true">// 1.定义中间件函数</span>
+<span class="token keyword">const</span> mw1 <span class="token operator">=</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'调用了局部路由1'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">const</span> mw2 <span class="token operator">=</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'调用了局部路由2'</span><span class="token punctuation">)</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 2.创建路由</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>mw1<span class="token punctuation">,</span> mw2<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'Hello World!'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/home'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'Hello Xiaozhangtx!'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span>port<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Example app listening on port </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>port<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">!`</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="8-3-中间件的注意事项"><a href="#8-3-中间件的注意事项" class="headerlink" title="8.3 中间件的注意事项"></a>8.3 中间件的注意事项</h3><ul>
+<li>中间件的注册一定要<strong>路由之前</strong></li>
+<li>客户端发送过来的请求，可以连续调用多个中间件来执行</li>
+<li>执行中间价时不要忘记使用<strong>next()函数</strong></li>
+<li>为了防止代码混乱，在next()之后不要写其他的代码</li>
+<li>共享req和res</li>
+</ul>
+<h3 id="8-4-中间件的分类"><a href="#8-4-中间件的分类" class="headerlink" title="8.4 中间件的分类"></a>8.4 中间件的分类</h3><h4 id="8-4-1-应用级别中间件"><a href="#8-4-1-应用级别中间件" class="headerlink" title="8.4.1 应用级别中间件"></a>8.4.1 应用级别中间件</h4><p>通过<code>app.use()</code>或<code>app.get()</code>…<strong>绑定到app实例上</strong>的中间件</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 没有挂载路径的中间件，应用的每个请求都会执行该中间件</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Time:'</span><span class="token punctuation">,</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 挂载至 /user/:id 的中间件，任何指向 /user/:id 的请求都会执行它</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/user/:id'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Request Type:'</span><span class="token punctuation">,</span> req<span class="token punctuation">.</span>method<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 路由和句柄函数(中间件系统)，处理指向 /user/:id 的 GET 请求</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/user/:id'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'USER'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="8-4-2-路由级中间件"><a href="#8-4-2-路由级中间件" class="headerlink" title="8.4.2 路由级中间件"></a>8.4.2 路由级中间件</h4><p>路由级中间件和应用级中间件一样，只是它绑定的对象为 <code>express.Router()</code>。<strong>绑定到router实例上</strong></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> router <span class="token operator">=</span> express<span class="token punctuation">.</span><span class="token function">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="8-4-3-错误处理中间件"><a href="#8-4-3-错误处理中间件" class="headerlink" title="8.4.3 错误处理中间件"></a>8.4.3 错误处理中间件</h4><p>错误处理中间件有 <strong><em>4</em> 个参数</strong>，定义错误处理中间件时必须使用这 4 个参数。即使不需要 <code>next</code> 对象，也必须在签名中声明它，否则中间件会被识别为一个常规中间件，不能处理错误。</p>
+<p>错误处理中间件和其他中间件定义类似，只是要使用 4 个参数，而不是 3 个，其签名如下： <code>(err, req, res, next)</code></p>
+<p><strong>注意：错误处理中间件一定要注册在所有的路由之后</strong></p>
+<pre class=" language-javascript"><code class="language-javascript">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">.</span>stack<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'Something broke!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="8-4-4-内置中间件"><a href="#8-4-4-内置中间件" class="headerlink" title="8.4.4 内置中间件"></a>8.4.4 内置中间件</h4><p>自 <code>Express 4.16.0</code> 版本开始，<code>Express</code> 内置了 3 个常用的中间件，极大的提高了 <code>Express</code> 项目的开发效率和体验</p>
+<ol>
+<li><code>express.static</code> 快速托管静态资源的内置中间件，例如： HTML 文件、图片、<code>CSS</code> 样式等（无兼容性）</li>
+<li><code>express.json</code> 解析 <code>JSON</code> 格式的请求体数据（<strong>有兼容性</strong>，仅在 <code>4.16.0+</code> 版本中可用）</li>
+<li><code>express.urlencoded</code> 解析 <code>URL-encoded</code> 格式的请求体数据（<strong>有兼容性</strong>，仅在 <code>4.16.0+</code> 版本中可用）</li>
+</ol>
+<ul>
+<li><code>express.json</code> 中间件的使用</li>
+</ul>
+<ol>
+<li><code>express.json()</code> 中间件，解析表单中的 <code>JSON</code> 格式的数据</li>
+<li>案例代码</li>
+</ol>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span>  <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 注意：除了错误级别的中间件，其他的中间件，必须在路由之前进行配置</span>
+<span class="token comment" spellcheck="true">// 通过 express.json() 这个中间件，解析表单中的 JSON 格式的数据</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>express<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/user'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 在服务器，可以使用 req.body 这个属性，来接收客户端发送过来的请求体数据</span>
+  <span class="token comment" spellcheck="true">// 默认情况下，如果不配置解析表单数据中间件，则 req.body 默认等于 undefined</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">)</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">'ok'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'running……'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><code>express.urlencoded</code> 中间件的使用</li>
+</ul>
+<ol>
+<li><code>express.urlencoded</code> 解析 <code>URL-encoded</code> 格式的请求体数据</li>
+<li>案例代码</li>
+</ol>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 通过 express.urlencoded() 这个中间件，来解析表单中的 url-encoded 格式的数据</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>express<span class="token punctuation">.</span><span class="token function">urlencoded</span><span class="token punctuation">(</span><span class="token punctuation">{</span> extended<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/book'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">)</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'running……'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h4 id="8-4-5-第三方中间件"><a href="#8-4-5-第三方中间件" class="headerlink" title="8.4.5 第三方中间件"></a>8.4.5 第三方中间件</h4><p>通过使用第三方中间件从而为 Express 应用增加更多功能。安装所需功能的 node 模块，并在应用中加载，可以在应用级加载，也可以在路由级加载。</p>
+<p>例如前面所学的：<code>body-parser</code></p>
+<h2 id="9-编写接口"><a href="#9-编写接口" class="headerlink" title="9 编写接口"></a>9 编写接口</h2><h3 id="9-1创件基本的服务器"><a href="#9-1创件基本的服务器" class="headerlink" title="9.1创件基本的服务器"></a>9.1创件基本的服务器</h3><h3 id="9-2-编写接口"><a href="#9-2-编写接口" class="headerlink" title="9.2 编写接口"></a>9.2 编写接口</h3><h3 id="9-3-解决跨域"><a href="#9-3-解决跨域" class="headerlink" title="9.3 解决跨域"></a>9.3 解决跨域</h3><p>使用<code>cors</code>来解决跨域</p>
+<blockquote>
+<p>CORS是一个W3C标准，全称是”跨域资源共享”（Cross-origin resource sharing）。参考链接：<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2016/04/cors.html">http://www.ruanyifeng.com/blog/2016/04/cors.html</a></p>
+</blockquote>
+<p>最后配置的的结果</p>
+<ul>
+<li><p><strong>app.js</strong></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 导入express</span>
+<span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 创建服务器实例</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 设置端口号</span>
+<span class="token keyword">const</span> port <span class="token operator">=</span> <span class="token number">8081</span>
+
+<span class="token comment" spellcheck="true">// 配置表单数据的中间件</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>express<span class="token punctuation">.</span><span class="token function">urlencoded</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token keyword">extends</span><span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 一定要在路由前配置cors来解决跨域问题</span>
+<span class="token keyword">const</span> cors <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'cors'</span><span class="token punctuation">)</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">cors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 导入路由模块</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./router'</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">// 注册到app中</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'/api'</span><span class="token punctuation">,</span> router<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 监听端口</span>
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span>port<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`app listening on port </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>port<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">!`</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li><p><strong>router.js</strong></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> router <span class="token operator">=</span> express<span class="token punctuation">.</span><span class="token function">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 定义GET接口</span>
+router<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/get'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 1. 通过req.query获取用户需要查询的数据</span>
+  <span class="token keyword">const</span> query <span class="token operator">=</span> req<span class="token punctuation">.</span>query
+  <span class="token comment" spellcheck="true">// 2. 调用res.send()方法向客户端相应处理的结果</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    status<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 0表示成功，1表示失败</span>
+    msg<span class="token punctuation">:</span> <span class="token string">'GET 请求成功'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//</span>
+    data<span class="token punctuation">:</span> query<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 响应给客户端的数据</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 定义POST接口</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/post'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 1. 通过req.body获取用户需要查询的数据</span>
+  <span class="token keyword">const</span> body <span class="token operator">=</span> req<span class="token punctuation">.</span>body
+  <span class="token comment" spellcheck="true">// 2. 调用res.send()方法向客户端相应处理的结果</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    status<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 0表示成功，1表示失败</span>
+    msg<span class="token punctuation">:</span> <span class="token string">'POST 请求成功'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//</span>
+    data<span class="token punctuation">:</span> body<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 响应给客户端的数据</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/update'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> name<span class="token punctuation">,</span> description <span class="token punctuation">}</span> <span class="token operator">=</span> req<span class="token punctuation">.</span>body
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Name </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, desc </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>description<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> router
+</code></pre>
+</li>
+</ul>
+<h2 id="10-MySQL"><a href="#10-MySQL" class="headerlink" title="10 MySQL"></a>10 MySQL</h2><h3 id="10-1-安装"><a href="#10-1-安装" class="headerlink" title="10.1 安装"></a>10.1 安装</h3><pre class=" language-shell"><code class="language-shell">npm install mysql
+</code></pre>
+<h3 id="10-2-配置mysql模块"><a href="#10-2-配置mysql模块" class="headerlink" title="10.2 配置mysql模块"></a>10.2 配置mysql模块</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 1.导入mysql模块</span>
+<span class="token keyword">const</span> mysql <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'mysql'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.建立连接关系</span>
+<span class="token keyword">const</span> db <span class="token operator">=</span> mysql<span class="token punctuation">.</span><span class="token function">createConnection</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  host<span class="token punctuation">:</span> <span class="token string">'127.0.0.1'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 数据库的ip地址</span>
+  user<span class="token punctuation">:</span> <span class="token string">'root'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 用户名</span>
+  password<span class="token punctuation">:</span> <span class="token string">'root'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 用户名密码</span>
+  database<span class="token punctuation">:</span> <span class="token string">'buyer'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 数据库名称</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="10-3-CRUD"><a href="#10-3-CRUD" class="headerlink" title="10.3 CRUD"></a>10.3 CRUD</h3><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 1.查询操作</span>
+db<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token string">'SELECT * FROM goods'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// MySQL错误</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 数据sql执行的结果</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.新增操作</span>
+<span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token punctuation">{</span> Uid<span class="token punctuation">:</span> <span class="token number">111113</span><span class="token punctuation">,</span> Upward<span class="token punctuation">:</span> <span class="token number">123455</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> sql <span class="token operator">=</span> <span class="token string">'INSERT INTO user set ?'</span>
+db<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> user<span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// MySQL错误</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 数据sql执行的结果</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 3.修改操作</span>
+<span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token punctuation">{</span> Uid<span class="token punctuation">:</span> <span class="token number">111113</span><span class="token punctuation">,</span> Upward<span class="token punctuation">:</span> <span class="token number">123455</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> sql <span class="token operator">=</span> <span class="token string">'UPDATE USER SET ? WHERE user.`Uid` = ?  '</span>
+db<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> <span class="token punctuation">[</span>user<span class="token punctuation">,</span> user<span class="token punctuation">.</span>Uid<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// MySQL错误</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 数据sql执行的结果</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 4.删除数据</span>
+<span class="token keyword">const</span> sql <span class="token operator">=</span> <span class="token string">'DELETE FROM USER WHERE user.`Uid` = ?'</span>
+<span class="token keyword">const</span> Uid <span class="token operator">=</span> <span class="token number">111113</span>
+db<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>sql<span class="token punctuation">,</span> Uid<span class="token punctuation">,</span> <span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// MySQL错误</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 数据sql执行的结果</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span> 
+</code></pre>
+<h2 id="11-身份认证"><a href="#11-身份认证" class="headerlink" title="11 身份认证"></a>11 身份认证</h2><blockquote>
+<p>Session、Cookie、Token</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1704064">https://cloud.tencent.com/developer/article/1704064</a></p>
+</blockquote>
+<h3 id="11-1-Cookie"><a href="#11-1-Cookie" class="headerlink" title="11.1 Cookie"></a>11.1 <strong>Cookie</strong></h3><ul>
+<li><strong>Cookie</strong>不具有安全性，因此不建议服务器将重要的隐私数据通过Cookie发送给浏览器，<strong>比如身份信息和密码</strong></li>
+<li>不超过<strong>4KB</strong></li>
+<li>保存在<strong>客户端</strong></li>
+</ul>
+<h3 id="11-2-Session"><a href="#11-2-Session" class="headerlink" title="11.2 Session"></a>11.2 <strong>Session</strong></h3><ul>
+<li>保存在<strong>服务端</strong></li>
+</ul>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> port <span class="token operator">=</span> <span class="token number">3000</span>
+
+<span class="token comment" spellcheck="true">// 1.导入session中间件</span>
+<span class="token keyword">const</span> session <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express-session'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 2.配置session中间件</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>
+  <span class="token function">session</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    secret<span class="token punctuation">:</span> <span class="token string">'my_session_secret'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 建议使用 128 个字符的随机字符串</span>
+    resave<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 固定写法</span>
+    saveUninitialized<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 固定写法</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>express<span class="token punctuation">.</span><span class="token function">urlencoded</span><span class="token punctuation">(</span><span class="token punctuation">{</span> extended<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 用户登录接口</span>
+app<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/api/login'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 判断提交的信息是否正确</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>username <span class="token operator">!==</span> <span class="token string">'admin'</span> <span class="token operator">||</span> req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>password <span class="token operator">!==</span> <span class="token string">'123456'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span> status<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> msg<span class="token punctuation">:</span> <span class="token string">'用户名或密码错误，请稍后再试'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment" spellcheck="true">// 3.将登录成功后的信息保存到session中</span>
+  req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>user <span class="token operator">=</span> req<span class="token punctuation">.</span>body <span class="token comment" spellcheck="true">// 用户信息</span>
+  req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>islogin <span class="token operator">=</span> <span class="token boolean">true</span> <span class="token comment" spellcheck="true">//用户状态</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span> status<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> msg<span class="token punctuation">:</span> <span class="token string">'登录成功'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 获取用户名接口</span>
+app<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token string">'/api/username'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>session<span class="token punctuation">)</span>
+  <span class="token comment" spellcheck="true">// 4. 从session中获取用户名称</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>islogin<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span> status<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> msg<span class="token punctuation">:</span> <span class="token string">'请登录后再试'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    status<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    msg<span class="token punctuation">:</span> <span class="token string">'获取成功'</span><span class="token punctuation">,</span>
+    data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      username<span class="token punctuation">:</span> req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>user<span class="token punctuation">.</span>username<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 退出登录</span>
+app<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">'/api/logout'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 5.清空session信息(只会清空当前用户)</span>
+  req<span class="token punctuation">.</span>session<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span> status<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> msg<span class="token punctuation">:</span> <span class="token string">'退出登录成功'</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span>port<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token string">`Example app listening on port </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>port<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">!`</span></span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="11-3-JWT认证机制"><a href="#11-3-JWT认证机制" class="headerlink" title="11.3 JWT认证机制"></a>11.3 <strong><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/576dbf44b2ae">JWT认证机制</a></strong></h3><blockquote>
+<p>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=https://tools.ietf.org/html/rfc7519">(RFC 7519</a>).该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
+<p><strong>目前比较流行的跨域认证解决方案</strong></p>
+</blockquote>
+<ul>
+<li><p>工作量流程</p>
+<blockquote>
+<ul>
+<li>用户使用用户名密码来请求服务器</li>
+<li>服务器进行验证用户的信息</li>
+<li>服务器通过验证发送给用户一个token</li>
+<li>客户端存储token，并在每次请求时附送上这个token值</li>
+<li>服务端验证token值，并返回数据</li>
+</ul>
+</blockquote>
+</li>
+<li><p>信息保存到<strong>客户端</strong></p>
+</li>
+<li><p><strong>组成部分</strong></p>
+<ul>
+<li>头部（header)</li>
+<li>载荷（payload, 类似于飞机上承载的物品)</li>
+<li>签证（signature).</li>
+</ul>
+</li>
+</ul>
+<p>2022 年 1 月 25 日更新                                                     </p>
 
                 
             </div>
