@@ -684,10 +684,483 @@ stuModle.create(
 
 #### 7.3.3 查看数据
 
-
-
 #### 7.3.4 修改数据
 
 #### 7.3.5 删除数据
 
-2022 年 1 月 17 日更新                                                     
+详见官网
+
+## 8 [中间件](https://www.w3cschool.cn/expressapi/expressapi-using-middleware.html)
+
+> 中间件是介于应用系统和系统软件之间的一类软件，它使用系统软件所提供的基础服务（功能），衔接网络上应用系统的**各个部分**或**不同的应用**，能够达到资源共享、功能共享的目的。对请求进行预处理
+>
+> **参考文件**：https://www.jianshu.com/p/797a4e38fe77
+
+### 中间件的作用
+
+>多个中间件之间 
+
+### 8.1**全局生效的中间件**
+
+> app.use()的作用就是注册全局的中间件
+
+```javascript
+/**
+ * express中间件的实现和执行顺序
+ *
+ * Created by BadWaka on 2017/3/6.
+ */
+var express = require('express')
+
+var app = express()
+app.listen(3000, function () {
+  console.log('listen 3000...')
+})
+
+function middlewareA(req, res, next) {
+  console.log('middlewareA before next()')
+  next()
+  console.log('middlewareA after next()')
+}
+
+function middlewareB(req, res, next) {
+  console.log('middlewareB before next()')
+  next()
+  console.log('middlewareB after next()')
+}
+
+function middlewareC(req, res, next) {
+  console.log('middlewareC before next()')
+  next()
+  console.log('middlewareC after next()')
+}
+
+app.use(middlewareA)
+app.use(middlewareB)
+app.use(middlewareC)
+```
+
+输出结果![image-20220122104630365](../img/image-20220122104630365.png)
+
+简洁写法:
+
+```javascript
+app.use((req, res, next) => {
+  console.log(hello)
+  next()
+})
+```
+
+### 8.2 局部生效的中间件
+
+```javascript
+const express = require('express')
+const app = express()
+const port = 3000
+
+// 1.定义中间件函数
+const mw1 = (req, res, next) => {
+  console.log('调用了局部路由1')
+  next()
+}
+const mw2 = (req, res, next) => {
+  console.log('调用了局部路由2')
+  next()
+}
+// 2.创建路由
+app.get('/', [mw1, mw2], (req, res) => res.send('Hello World!'))
+app.get('/home', (req, res) => res.send('Hello Xiaozhangtx!'))
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+```
+
+### 8.3 中间件的注意事项
+
+- 中间件的注册一定要**路由之前**
+- 客户端发送过来的请求，可以连续调用多个中间件来执行
+- 执行中间价时不要忘记使用**next()函数**
+- 为了防止代码混乱，在next()之后不要写其他的代码
+- 共享req和res
+
+### 8.4 中间件的分类
+
+#### 8.4.1 应用级别中间件
+
+通过`app.use()`或`app.get()`...**绑定到app实例上**的中间件
+
+```javascript
+var app = express();
+
+// 没有挂载路径的中间件，应用的每个请求都会执行该中间件
+app.use(function (req, res, next) {
+  console.log('Time:', Date.now());
+  next();
+});
+
+// 挂载至 /user/:id 的中间件，任何指向 /user/:id 的请求都会执行它
+app.use('/user/:id', function (req, res, next) {
+  console.log('Request Type:', req.method);
+  next();
+});
+
+// 路由和句柄函数(中间件系统)，处理指向 /user/:id 的 GET 请求
+app.get('/user/:id', function (req, res, next) {
+  res.send('USER');
+});
+```
+
+#### 8.4.2 路由级中间件
+
+路由级中间件和应用级中间件一样，只是它绑定的对象为 `express.Router()`。**绑定到router实例上**
+
+```javascript
+var router = express.Router();
+```
+
+#### 8.4.3 错误处理中间件
+
+错误处理中间件有 ***4* 个参数**，定义错误处理中间件时必须使用这 4 个参数。即使不需要 `next` 对象，也必须在签名中声明它，否则中间件会被识别为一个常规中间件，不能处理错误。
+
+错误处理中间件和其他中间件定义类似，只是要使用 4 个参数，而不是 3 个，其签名如下： `(err, req, res, next)`
+
+**注意：错误处理中间件一定要注册在所有的路由之后**
+
+```javascript
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+```
+
+#### 8.4.4 内置中间件
+
+自 `Express 4.16.0` 版本开始，`Express` 内置了 3 个常用的中间件，极大的提高了 `Express` 项目的开发效率和体验
+
+1. `express.static` 快速托管静态资源的内置中间件，例如： HTML 文件、图片、`CSS` 样式等（无兼容性）
+2. `express.json` 解析 `JSON` 格式的请求体数据（**有兼容性**，仅在 `4.16.0+` 版本中可用）
+3. `express.urlencoded` 解析 `URL-encoded` 格式的请求体数据（**有兼容性**，仅在 `4.16.0+` 版本中可用）
+
+- `express.json` 中间件的使用
+
+1. `express.json()` 中间件，解析表单中的 `JSON` 格式的数据
+2. 案例代码
+
+```javascript
+const  = require('express')
+const app = express()
+
+// 注意：除了错误级别的中间件，其他的中间件，必须在路由之前进行配置
+// 通过 express.json() 这个中间件，解析表单中的 JSON 格式的数据
+app.use(express.json())
+
+app.post('/user', (req, res) => {
+  // 在服务器，可以使用 req.body 这个属性，来接收客户端发送过来的请求体数据
+  // 默认情况下，如果不配置解析表单数据中间件，则 req.body 默认等于 undefined
+  console.log(req.body)
+  res.send('ok')
+})
+
+app.listen(3000, () => {
+  console.log('running……')
+})
+```
+
+- `express.urlencoded` 中间件的使用
+
+1. `express.urlencoded` 解析 `URL-encoded` 格式的请求体数据
+2. 案例代码
+
+```javascript
+const express = require('express')
+const app = express()
+
+// 通过 express.urlencoded() 这个中间件，来解析表单中的 url-encoded 格式的数据
+app.use(express.urlencoded({ extended: false }))
+
+app.post('/book', (req, res) => {
+  console.log(req.body)
+  res.send(req.body)
+})
+
+app.listen(3000, () => {
+  console.log('running……')
+})
+```
+
+#### 8.4.5 第三方中间件
+
+通过使用第三方中间件从而为 Express 应用增加更多功能。安装所需功能的 node 模块，并在应用中加载，可以在应用级加载，也可以在路由级加载。
+
+例如前面所学的：`body-parser`
+
+## 9 编写接口
+
+### 9.1创件基本的服务器
+
+### 9.2 编写接口
+
+### 9.3 解决跨域
+
+使用`cors`来解决跨域
+
+> CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）。参考链接：http://www.ruanyifeng.com/blog/2016/04/cors.html
+
+最后配置的的结果
+
+- **app.js**
+
+  ```javascript
+  // 导入express
+  const express = require('express')
+  // 创建服务器实例
+  const app = express()
+  // 设置端口号
+  const port = 8081
+  
+  // 配置表单数据的中间件
+  app.use(express.urlencoded({ extends: false }))
+  
+  // 一定要在路由前配置cors来解决跨域问题
+  const cors = require('cors')
+  app.use(cors())
+  
+  // 导入路由模块
+  const router = require('./router')
+  // 注册到app中
+  app.use('/api', router)
+  
+  // 监听端口
+  app.listen(port, () => console.log(`app listening on port ${port}!`))
+  
+  ```
+
+- **router.js**
+
+  ```javascript
+  const express = require('express')
+  
+  const router = express.Router()
+  
+  // 定义GET接口
+  router.get('/get', (req, res) => {
+    // 1. 通过req.query获取用户需要查询的数据
+    const query = req.query
+    // 2. 调用res.send()方法向客户端相应处理的结果
+    res.send({
+      status: 0, // 0表示成功，1表示失败
+      msg: 'GET 请求成功', //
+      data: query, // 响应给客户端的数据
+    })
+  })
+  
+  // 定义POST接口
+  router.post('/post', (req, res) => {
+    // 1. 通过req.body获取用户需要查询的数据
+    const body = req.body
+    // 2. 调用res.send()方法向客户端相应处理的结果
+    res.send({
+      status: 0, // 0表示成功，1表示失败
+      msg: 'POST 请求成功', //
+      data: body, // 响应给客户端的数据
+    })
+  })
+  
+  router.post('/update', function (req, res) {
+    const { name, description } = req.body
+    res.send(`Name ${name}, desc ${description}`)
+  })
+  
+  module.exports = router
+  ```
+
+## 10 MySQL
+
+### 10.1 安装
+
+```shell
+npm install mysql
+```
+
+### 10.2 配置mysql模块
+
+```javascript
+// 1.导入mysql模块
+const mysql = require('mysql')
+
+// 2.建立连接关系
+const db = mysql.createConnection({
+  host: '127.0.0.1', // 数据库的ip地址
+  user: 'root', // 用户名
+  password: 'root', // 用户名密码
+  database: 'buyer', // 数据库名称
+})
+```
+
+### 10.3 CRUD
+
+```javascript
+// 1.查询操作
+db.query('SELECT * FROM goods', (err, res) => {
+  // MySQL错误
+  if (err) return console.log(err)
+  // 数据sql执行的结果
+  console.log(res)
+})
+
+// 2.新增操作
+const user = { Uid: 111113, Upward: 123455 }
+const sql = 'INSERT INTO user set ?'
+db.query(sql, user, (err, res) => {
+  // MySQL错误
+  if (err) return console.log(err)
+  // 数据sql执行的结果
+  console.log(res)
+})
+
+// 3.修改操作
+const user = { Uid: 111113, Upward: 123455 }
+const sql = 'UPDATE USER SET ? WHERE user.`Uid` = ?  '
+db.query(sql, [user, user.Uid], (err, res) => {
+  // MySQL错误
+  if (err) return console.log(err)
+  // 数据sql执行的结果
+  console.log(res)
+})
+
+// 4.删除数据
+const sql = 'DELETE FROM USER WHERE user.`Uid` = ?'
+const Uid = 111113
+db.query(sql, Uid, (err, res) => {
+  // MySQL错误
+  if (err) return console.log(err)
+  // 数据sql执行的结果
+  console.log(res)
+}) 
+```
+
+## 11 身份认证
+
+> Session、Cookie、Token
+>
+> 参考链接：https://cloud.tencent.com/developer/article/1704064
+
+### 11.1 **Cookie**
+
+- **Cookie**不具有安全性，因此不建议服务器将重要的隐私数据通过Cookie发送给浏览器，**比如身份信息和密码**
+- 不超过**4KB**
+- 保存在**客户端**
+
+### 11.2 **Session**
+
+- 保存在**服务端**
+
+```javascript
+const express = require('express')
+const app = express()
+const port = 3000
+
+// 1.导入session中间件
+const session = require('express-session')
+
+// 2.配置session中间件
+app.use(
+  session({
+    secret: 'my_session_secret', // 建议使用 128 个字符的随机字符串
+    resave: false, // 固定写法
+    saveUninitialized: true, // 固定写法
+  })
+)
+
+app.use(express.urlencoded({ extended: false }))
+
+// 用户登录接口
+app.post('/api/login', (req, res) => {
+  // 判断提交的信息是否正确
+  if (req.body.username !== 'admin' || req.body.password !== '123456') {
+    return res.send({ status: 0, msg: '用户名或密码错误，请稍后再试' })
+  }
+  // 3.将登录成功后的信息保存到session中
+  req.session.user = req.body // 用户信息
+  req.session.islogin = true //用户状态
+  res.send({ status: 1, msg: '登录成功' })
+})
+
+// 获取用户名接口
+app.get('/api/username', (req, res) => {
+  console.log(req.session)
+  // 4. 从session中获取用户名称
+  if (!req.session.islogin) {
+    return res.send({ status: 0, msg: '请登录后再试' })
+  }
+  res.send({
+    status: 0,
+    msg: '获取成功',
+    data: {
+      username: req.session.user.username,
+    },
+  })
+})
+
+// 退出登录
+app.post('/api/logout', (req, res) => {
+  // 5.清空session信息(只会清空当前用户)
+  req.session.destroy()
+  res.send({ status: 1, msg: '退出登录成功' })
+})
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+```
+
+### 11.3 **[JWT认证机制](https://www.jianshu.com/p/576dbf44b2ae)**
+
+> Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（[(RFC 7519](https://link.jianshu.com?t=https://tools.ietf.org/html/rfc7519)).该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。
+>
+> **目前比较流行的跨域认证解决方案**
+
+- 工作量流程
+
+  > - 用户使用用户名密码来请求服务器
+  > - 服务器进行验证用户的信息
+  > - 服务器通过验证发送给用户一个token
+  > - 客户端存储token，并在每次请求时附送上这个token值
+  > - 服务端验证token值，并返回数据
+
+- 信息保存到**客户端**
+- **组成部分**
+  - 头部（header)
+  - 载荷（payload, 类似于飞机上承载的物品)
+  - 签证（signature).
+
+```javascript
+const express = require('express')
+const app = express()
+const port = 3000
+
+// 1. 导入生成JWT字符的包
+const jwt = require('jsonwebtoken')
+// 2. 导入将客户端发过来的JWT字符串解析还原成JSION对象的包
+const expressJWT = require('express-jwt')
+// 3. 定义secret密钥,对jwt进行加密和解密
+const secrestKey = 'xiaozhangtx10101'
+
+// 允许资源跨域
+const cors = require('cors')
+app.use(cors)
+
+app.use(express.urlencoded({ extended: false }))
+
+// 用户登录接口
+app.post('/api/login', (req, res) => {
+  // 判断提交的信息是否正确
+  if (req.body.username !== 'admin' || req.body.password !== '123456') {
+    return res.send({ status: 0, msg: '用户名或密码错误，请稍后再试' })
+  }
+  // 4. 调用jwt.sign()将用户信息加密成JWT字符串，相应给客户端
+  res.send({ status: 1, msg: '登录成功' })
+})
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+```
+
+
+
+2022 年 1 月 25 日更新                                                     
+
