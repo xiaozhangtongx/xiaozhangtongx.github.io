@@ -703,7 +703,535 @@ ua <span class="token operator">=</span> UserAgent<span class="token punctuation
 <h4 id="2-解析函数"><a href="#2-解析函数" class="headerlink" title="2) 解析函数"></a>2) 解析函数</h4><p>解析函数用来解析 HTML 页面，常用的解析模块有正则解析模块、bs4 解析模块。通过分析页面，提取出所需的数据，在后续内容会做详细介绍。</p>
 <h4 id="3-保存数据函数"><a href="#3-保存数据函数" class="headerlink" title="3) 保存数据函数"></a>3) 保存数据函数</h4><p>该函数负责将抓取下来的数据保至数据库中，比如 MySQL、MongoDB 等，或者将其保存为文件格式，比如 csv、txt、excel 等。</p>
 <h4 id="4-入口函数"><a href="#4-入口函数" class="headerlink" title="4) 入口函数"></a>4) 入口函数</h4><p>入口函数充当整个爬虫程序的桥梁，通过调用不同的功能函数，实现数据的最终抓取。入口函数的主要任务是组织数据，比如要搜索的贴吧名、编码 url 参数、拼接 url 地址、定义文件保存路径。</p>
-<h2 id="5"><a href="#5" class="headerlink" title="5"></a>5</h2>
+<h2 id="5-Requests模块"><a href="#5-Requests模块" class="headerlink" title="5 Requests模块"></a>5 <a target="_blank" rel="noopener" href="https://blog.csdn.net/Zachary579/article/details/109823431">Requests模块</a></h2><h3 id="5-1-起步"><a href="#5-1-起步" class="headerlink" title="5.1 起步"></a>5.1 起步</h3><ul>
+<li><p><strong>简介</strong></p>
+<p>Requests继承了urllib的所有特性。Requests支持http连接保持和连接池，支持使用cookie 保持会话，支持文件上传，支持自动确定响应内容的编码，支持国际化的 URL 和 POST 数 据自动编码。</p>
+</li>
+<li><p><strong>安装</strong></p>
+<pre class=" language-shell"><code class="language-shell">pip install requests
+</code></pre>
+</li>
+</ul>
+<h3 id="5-2-GET请求"><a href="#5-2-GET请求" class="headerlink" title="5.2 GET请求"></a>5.2 GET请求</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> requests
+
+<span class="token comment" spellcheck="true"># 自定义搜索内容</span>
+wd <span class="token operator">=</span> input<span class="token punctuation">(</span><span class="token string">'请输入想要查询的内容：'</span><span class="token punctuation">)</span>
+
+params <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">"wd"</span><span class="token punctuation">:</span> <span class="token string">"python"</span>
+<span class="token punctuation">}</span>
+
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>  <span class="token comment" spellcheck="true"># 定义请求头字典</span>
+    <span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span><span class="token string">'https://www.baidu.com/s'</span><span class="token punctuation">,</span> params<span class="token operator">=</span>params<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>headers<span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> open<span class="token punctuation">(</span>f<span class="token string">'{wd}.html'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fp<span class="token punctuation">:</span>
+    fp<span class="token punctuation">.</span>write<span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="5-3-POST请求"><a href="#5-3-POST请求" class="headerlink" title="5.3 POST请求"></a>5.3 POST请求</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> requests
+
+<span class="token comment" spellcheck="true"># 自定义用户输入</span>
+kw <span class="token operator">=</span> input<span class="token punctuation">(</span><span class="token string">'请输入想要查询的单词：'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 定义参数字典</span>
+data <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'kw'</span><span class="token punctuation">:</span>kw
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># 定义请求头</span>
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'</span><span class="token punctuation">,</span>
+    <span class="token string">'x-requested-with'</span><span class="token punctuation">:</span> <span class="token string">'XMLHttpRequest'</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true"># 发起请求，接收响应</span>
+response <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span><span class="token string">'https://fanyi.baidu.com/sug'</span><span class="token punctuation">,</span>data<span class="token operator">=</span>data<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 使用json()可以将json格式的字符串转换成字典</span>
+data_list <span class="token operator">=</span> response<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span>
+
+<span class="token comment" spellcheck="true"># 获取数据</span>
+<span class="token keyword">for</span> data <span class="token keyword">in</span> data_list<span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># 获取单词</span>
+    word <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token string">'k'</span><span class="token punctuation">]</span>
+    <span class="token comment" spellcheck="true"># 获取解释</span>
+    explain <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token string">'v'</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>word<span class="token punctuation">,</span>explain<span class="token punctuation">)</span>
+</code></pre>
+<h2 id="6-数据解析"><a href="#6-数据解析" class="headerlink" title="6 数据解析"></a>6 数据解析</h2><h3 id="6-1-re解析"><a href="#6-1-re解析" class="headerlink" title="6.1 re解析"></a>6.1 re解析</h3><p>正则表达式(regular expression)是一种字符串匹配模式或者规则，它可以用来检索、替换那些符合特定规则的文本。正则表达式几乎适用于所有编程语言，无论是前端语言 JavaScript，还是诸如许多后端语言，比如 Python、Java、C# 等，这些语言都提供了相应的函数、模块来支持正则表达式，比如 Python 的 re 模块就提供了正则表达式的常用方法。</p>
+<h4 id="6-1-1-正则表达式"><a href="#6-1-1-正则表达式" class="headerlink" title="6.1.1 正则表达式"></a>6.1.1 正则表达式</h4><ul>
+<li> <strong>元字符</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>元字符</th>
+<th align="center">匹配内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.</td>
+<td align="center">匹配除换行符以外的任意字符</td>
+</tr>
+<tr>
+<td>\w</td>
+<td align="center">匹配所有普通字符(数字、字母或下划线)</td>
+</tr>
+<tr>
+<td>\s</td>
+<td align="center">匹配任意的空白符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td align="center">匹配数字</td>
+</tr>
+<tr>
+<td>\n</td>
+<td align="center">匹配一个换行符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td align="center">匹配一个制表符</td>
+</tr>
+<tr>
+<td>\b</td>
+<td align="center">匹配一个单词的结尾</td>
+</tr>
+<tr>
+<td>^</td>
+<td align="center">匹配字符串的开始位置</td>
+</tr>
+<tr>
+<td>$</td>
+<td align="center">匹配字符串的结尾位置</td>
+</tr>
+<tr>
+<td>\W</td>
+<td align="center">匹配非字母或数字或下划线</td>
+</tr>
+<tr>
+<td>\D</td>
+<td align="center">匹配非数字</td>
+</tr>
+<tr>
+<td>\S</td>
+<td align="center">匹配非空白符</td>
+</tr>
+<tr>
+<td>a|b</td>
+<td align="center">匹配字符 a 或字符 b</td>
+</tr>
+<tr>
+<td>()</td>
+<td align="center">正则表达式分组所用符号，匹配括号内的表达式，表示一个组。</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td align="center">匹配字符组中的字符</td>
+</tr>
+<tr>
+<td>[^…]</td>
+<td align="center">匹配除了字符组中字符的所有字符</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>量词</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">量词</th>
+<th>用法说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">*</td>
+<td>重复零次或者更多次</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td>重复一次或者更多次</td>
+</tr>
+<tr>
+<td align="center">？</td>
+<td>重复0次或者一次</td>
+</tr>
+<tr>
+<td align="center">{n}</td>
+<td>重复n次</td>
+</tr>
+<tr>
+<td align="center">{n,}</td>
+<td>重复n次或者更多次</td>
+</tr>
+<tr>
+<td align="center">{n,m}</td>
+<td>重复n到m次</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>字符组</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>正则</th>
+<th>待匹配字符</th>
+<th>匹配结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[0123456789]</td>
+<td>8</td>
+<td>True</td>
+<td>在一个字符组里枚举所有字符，字符组里的任意一个字符 和”待匹配字符”相同都视为可以匹配。</td>
+</tr>
+<tr>
+<td>[0123456789]</td>
+<td>a</td>
+<td>False</td>
+<td>由于字符组中没有 “a” 字符，所以不能匹配。</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>7</td>
+<td>True</td>
+<td>也可以用-表示范围，[0-9] 就和 [0123456789] 是一个意思。</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>s</td>
+<td>True</td>
+<td>同样的如果要匹配所有的小写字母，直接用 [a-z] 就可以表示。</td>
+</tr>
+<tr>
+<td>[A-Z]</td>
+<td>B</td>
+<td>True</td>
+<td>[A-Z] 就表示所有的大写字母。</td>
+</tr>
+<tr>
+<td>[0-9a-fA-F]</td>
+<td>e</td>
+<td>True</td>
+<td>可以匹配数字，大小写形式的 a～f，用来验证十六进制字符。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>贪婪模式非贪婪模式</strong></li>
+</ul>
+<p>正则表达式默认为贪婪匹配，也就是尽可能多的向后匹配字符，比如 {n,m} 表示匹配前面的内容出现 n 到 m 次（n 小于 m），在贪婪模式下，首先以匹配 m 次为目标，而在非贪婪模式是尽可能少的向后匹配内容，也就是说匹配 n 次即可。</p>
+<p>贪婪模式转换为非贪婪模式的方法很简单，在元字符后添加“?”即可实现</p>
+<table>
+<thead>
+<tr>
+<th>元字符(贪婪模式)</th>
+<th align="center">非贪婪模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.*</td>
+<td align="center">.*?</td>
+</tr>
+</tbody></table>
+<p>注意在爬虫中用的最多的就是<strong>非贪婪模式</strong></p>
+<h4 id="6-1-2-正则表达式"><a href="#6-1-2-正则表达式" class="headerlink" title="6.1.2 正则表达式"></a>6.1.2 正则表达式</h4><h4 id="1-re-compile"><a href="#1-re-compile" class="headerlink" title="1) re.compile()"></a>1) re.compile()</h4><p>该方法用来生成正则表达式对象，其语法格式如下：</p>
+<pre><code>regex=re.compile(pattern,flags=0)
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>pattern：正则表达式对象。</li>
+<li>flags：代表功能标志位，扩展正则表达式的匹配。</li>
+</ul>
+<h4 id="2-re-findall"><a href="#2-re-findall" class="headerlink" title="2) re.findall()"></a>2) re.findall()</h4><p>根据正则表达式匹配目标字符串内容。</p>
+<pre><code>re.findall(pattern,string,flags=0)
+</code></pre>
+<p>该函数的返回值是匹配到的内容列表，如果正则表达式有子组，则只能获取到子组对应的内容。参数说明如下：</p>
+<ul>
+<li>pattern：正则表达式对象。</li>
+<li>string：目标字符串</li>
+<li>flags：代表功能标志位，扩展正则表达式的匹配。</li>
+</ul>
+<h4 id="3-regex-findall"><a href="#3-regex-findall" class="headerlink" title="3) regex.findall()"></a>3) regex.findall()</h4><p>该函数根据正则表达式对象匹配目标字符串内容。其语法格式如下：</p>
+<pre><code>regex.findall(string,pos,endpos)
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>string 目标字符串。</li>
+<li>pos 截取目标字符串的开始匹配位置。</li>
+<li>endpos 截取目标字符串的结束匹配位置。</li>
+</ul>
+<h4 id="4-re-split"><a href="#4-re-split" class="headerlink" title="4) re.split()"></a>4) re.split()</h4><p>该函数使用正则表达式匹配内容，切割目标字符串。返回值是切割后的内容列表。参数说明：</p>
+<pre><code>re.split(pattern,string,flags = 0)
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>pattern：正则表达式。</li>
+<li>string：目标字符串。</li>
+<li>flags：功能标志位,扩展正则表达式的匹配。</li>
+</ul>
+<p>\5) re.sub<br>该函数使用一个字符串替换正则表达式匹配到的内容。返回值是替换后的字符串。其语法格式如下：</p>
+<pre><code>re.sub(pattern,replace,string,max,flags = 0)
+</code></pre>
+<p>其参数说明：</p>
+<ul>
+<li>pattern：正则表达式。</li>
+<li>replace：替换的字符串。</li>
+<li>string：目标字符串。</li>
+<li>max：最多替换几处，默认替换全部，</li>
+<li>flags：功能标志位,扩展正则表达式的匹配。</li>
+</ul>
+<h4 id="5-re-search"><a href="#5-re-search" class="headerlink" title="5) re.search()"></a>5) re.search()</h4><p>匹配目标字符串第一个符合的内容，返回值为匹配的对象。语法格式如下：</p>
+<pre><code>re.search(pattern,string,flags=0)
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li>pattern：正则表达式</li>
+<li>string：目标字符串</li>
+</ul>
+<h4 id="flags功能标志位"><a href="#flags功能标志位" class="headerlink" title="flags功能标志位"></a>flags功能标志位</h4><p>功能标志位的作用是扩展正则表达的匹配功能。常用的 flag 如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>缩写元字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>元字符只能匹配 ASCII码。</td>
+</tr>
+<tr>
+<td>I</td>
+<td>匹配忽略字母大小写。</td>
+</tr>
+<tr>
+<td>S</td>
+<td>使得<code>.</code>元字符可以匹配换行符。</td>
+</tr>
+<tr>
+<td>M</td>
+<td>使 ^ $ 可以匹配每一行的开头和结尾位置。</td>
+</tr>
+</tbody></table>
+<p>注意：可以同时使用福多个功能标志位，比如 flags=re.I|re.S。</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> re
+
+lst <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span>r<span class="token string">"\d+"</span><span class="token punctuation">,</span> <span class="token string">"我的电话号：12345678911,你的电话号码：123456789123"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>lst<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># finditer迭代器</span>
+it <span class="token operator">=</span> re<span class="token punctuation">.</span>finditer<span class="token punctuation">(</span>r<span class="token string">"\d+"</span><span class="token punctuation">,</span> <span class="token string">"我的电话号：12345678911,你的电话号码：123456789123"</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> it<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># search返回的是macth对象，找到一个结果就返回,全文匹配</span>
+it <span class="token operator">=</span> re<span class="token punctuation">.</span>search<span class="token punctuation">(</span>r<span class="token string">"\d+"</span><span class="token punctuation">,</span> <span class="token string">"我的电话号：12345678911,你的电话号码：123456789123"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>it<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 从头开始匹配</span>
+<span class="token comment" spellcheck="true"># it = re.match(r"\d+", "我的电话号：12345678911,你的电话号码：123456789123")</span>
+<span class="token comment" spellcheck="true"># print(it.group())</span>
+
+<span class="token comment" spellcheck="true"># 预加载正则表达式</span>
+obj <span class="token operator">=</span> re<span class="token punctuation">.</span>compile<span class="token punctuation">(</span>r<span class="token string">"\d+"</span><span class="token punctuation">)</span>
+
+res1 <span class="token operator">=</span> obj<span class="token punctuation">.</span>finditer<span class="token punctuation">(</span><span class="token string">"我的电话号：12345678911,你的电话号码：123456789123"</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> res1<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"res1"</span><span class="token punctuation">,</span> i<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+res2 <span class="token operator">=</span> obj<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">"sdsjkhjfk123321,sdfdsfsd45641231"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>res2<span class="token punctuation">)</span>
+
+html <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
+&lt;div class="c1">&lt;p id="i1">www.biancheng.net&lt;/p>&lt;/div>
+&lt;div class="c2">&lt;p id="i2">编程帮&lt;/p>&lt;/div>
+"""</span>
+<span class="token comment" spellcheck="true"># (?P&lt;分组名称>正则)可以从单纯的结果里面获取结果的内容</span>
+obj <span class="token operator">=</span> re<span class="token punctuation">.</span>compile<span class="token punctuation">(</span>r<span class="token string">'&lt;div class=".*?">&lt;p id="(?P&lt;id>.*?)">(?P&lt;content>.*?)&lt;/p>&lt;/div>'</span><span class="token punctuation">,</span> re<span class="token punctuation">.</span>S<span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># re.S让点能够匹配换行符</span>
+
+res3 <span class="token operator">=</span> obj<span class="token punctuation">.</span>finditer<span class="token punctuation">(</span>html<span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> res3<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"res3"</span><span class="token punctuation">,</span> i<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token string">"content"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"res3"</span><span class="token punctuation">,</span> i<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h4 id="豆瓣TOP250实战"><a href="#豆瓣TOP250实战" class="headerlink" title="豆瓣TOP250实战"></a>豆瓣TOP250实战</h4><pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">import</span> re
+<span class="token keyword">from</span> fake_useragent <span class="token keyword">import</span> UserAgent
+<span class="token keyword">import</span> csv
+
+<span class="token comment" spellcheck="true"># 实例化一个对象</span>
+ua <span class="token operator">=</span> UserAgent<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># 随机获取一个谷歌浏览器ua</span>
+headers <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'User-Agent'</span><span class="token punctuation">:</span> ua<span class="token punctuation">.</span>chrome<span class="token punctuation">}</span>
+url <span class="token operator">=</span> <span class="token string">"https://movie.douban.com/top250"</span>
+params <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">"start"</span><span class="token punctuation">:</span> <span class="token number">0</span>
+<span class="token punctuation">}</span>
+
+html <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> params<span class="token operator">=</span>params<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+obj <span class="token operator">=</span> re<span class="token punctuation">.</span>compile<span class="token punctuation">(</span>r<span class="token string">'&lt;li>.*?&lt;div class="item">.*?&lt;span class="title">(?P&lt;name>.*?)&lt;/span>.*?&lt;p class="">.*?&lt;br>'</span>
+                 r<span class="token string">'(?P&lt;year>.*?)&amp;nbsp;/&amp;nbsp;(?P&lt;nation>.*?)&amp;nbsp;/&amp;nbsp;(?P&lt;tag>.*?)&lt;/p>.*?'</span>
+                 r<span class="token string">'&lt;span class="rating_num" property="v:average">(?P&lt;score>.*?)&lt;/span>.*?&lt;span>(?P&lt;num>.*?)人评价&lt;/span>'</span>
+                 r<span class="token string">'.*?&lt;span class="inq">(?P&lt;main>.*?)&lt;/span>.*?&lt;/li>'</span><span class="token punctuation">,</span> re<span class="token punctuation">.</span>S<span class="token punctuation">)</span>
+res <span class="token operator">=</span> obj<span class="token punctuation">.</span>finditer<span class="token punctuation">(</span>html<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+f <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"data.csv"</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'w'</span><span class="token punctuation">,</span> newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
+csvwriter <span class="token operator">=</span> csv<span class="token punctuation">.</span>writer<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> res<span class="token punctuation">:</span>
+    dic <span class="token operator">=</span> i<span class="token punctuation">.</span>groupdict<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    dic<span class="token punctuation">[</span><span class="token string">'year'</span><span class="token punctuation">]</span> <span class="token operator">=</span> dic<span class="token punctuation">[</span><span class="token string">'year'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    dic<span class="token punctuation">[</span><span class="token string">'score'</span><span class="token punctuation">]</span> <span class="token operator">=</span> dic<span class="token punctuation">[</span><span class="token string">'score'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>dic<span class="token punctuation">)</span>
+    csvwriter<span class="token punctuation">.</span>writerow<span class="token punctuation">(</span>dic<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+html<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+f<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"over"</span><span class="token punctuation">)</span>
+</code></pre>
+<h3 id="6-2-bs4解析"><a href="#6-2-bs4解析" class="headerlink" title="6.2 bs4解析"></a>6.2 bs4解析</h3><pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> bs4 <span class="token keyword">import</span> BeautifulSoup
+<span class="token keyword">import</span> requests
+<span class="token keyword">import</span> csv
+
+url <span class="token operator">=</span> <span class="token string">"http://whut.edu.cn/"</span>
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+res<span class="token punctuation">.</span>encoding <span class="token operator">=</span> <span class="token string">'utf-8'</span>
+
+f <span class="token operator">=</span> open<span class="token punctuation">(</span><span class="token string">"whut.csv"</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'w'</span><span class="token punctuation">,</span>newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
+csvwriter <span class="token operator">=</span> csv<span class="token punctuation">.</span>writer<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+
+page <span class="token operator">=</span> BeautifulSoup<span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">,</span> <span class="token string">'html.parser'</span><span class="token punctuation">)</span>
+ul <span class="token operator">=</span> page<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">"ul"</span><span class="token punctuation">,</span> attrs<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"class"</span><span class="token punctuation">:</span> <span class="token string">"art_list"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+lis <span class="token operator">=</span> ul<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">"li"</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> lis<span class="token punctuation">:</span>
+    data <span class="token operator">=</span> i<span class="token punctuation">.</span>text
+    csvwriter<span class="token punctuation">.</span>writerow<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="6-3-xpath解析"><a href="#6-3-xpath解析" class="headerlink" title="6.3 xpath解析"></a>6.3 xpath解析</h3><h4 id="6-3-1-简介"><a href="#6-3-1-简介" class="headerlink" title="6.3.1 简介"></a>6.3.1 简介</h4><p>XPath（全称：XML Path Language）<strong>即 XML 路径语言</strong>，它是一门在 XML 文档中查找信息的语言，最初被用来搜寻 XML 文档，同时它也适用于搜索 HTML 文档。因此，在爬虫过程中可以使用 XPath 来提取相应的数据。</p>
+<blockquote>
+<p>提示：XML 是一种遵守 W3C 标椎的标记语言，类似于 HTML，但两者的设计目的是不同，XML 通常被用来传输和存储数据，而 HTML 常用来显示数据。</p>
+</blockquote>
+<p>您可以将 Xpath 理解为在<code>XML/HTML</code>文档中检索、匹配元素节点的工具。</p>
+<p>Xpath 使用路径表达式来选取<code>XML/HTML</code>文档中的节点或者节点集。Xpath 的功能十分强大，它除了提供了简洁的路径表达式外，还提供了100 多个内建函数，包括了处理字符串、数值、日期以及时间的函数。因此 Xpath 路径表达式几乎可以匹配所有的元素节点。</p>
+<blockquote>
+<p>Python 第三方解析库 lxml 对 Xpath 路径表达式提供了良好的支持，能够解析 XML 与 HTML 文档</p>
+</blockquote>
+<ul>
+<li><p><strong>安装</strong></p>
+<pre class=" language-shell"><code class="language-shell">pip install lxml
+</code></pre>
+</li>
+<li><p><strong>起步</strong></p>
+</li>
+</ul>
+<h5 id="1-基本语法使用"><a href="#1-基本语法使用" class="headerlink" title="1) 基本语法使用"></a>1) 基本语法使用</h5><p>Xpath 使用路径表达式在文档中选取节点，下表列出了常用的表达式规则：</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>node_name</td>
+<td>选取此节点的所有子节点。</td>
+</tr>
+<tr>
+<td>/</td>
+<td>绝对路径匹配，从根节点选取。</td>
+</tr>
+<tr>
+<td>//</td>
+<td>相对路径匹配，从所有节点中查找当前选择的节点，包括子节点和后代节点，其第一个 / 表示根节点。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>选取当前节点。</td>
+</tr>
+<tr>
+<td>..</td>
+<td>选取当前节点的父节点。</td>
+</tr>
+<tr>
+<td>@</td>
+<td>选取属性值，通过属性值选取数据。常用元素属性有 @id 、@name、@type、@class、@tittle、@href。</td>
+</tr>
+</tbody></table>
+<h5 id="2-xpath通配符"><a href="#2-xpath通配符" class="headerlink" title="2) xpath通配符"></a>2) xpath通配符</h5><p>Xpath 表达式的通配符可以用来选取未知的节点元素，基本语法如下：</p>
+<table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>描述说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配任意元素节点</td>
+</tr>
+<tr>
+<td>@*</td>
+<td>匹配任意属性节点</td>
+</tr>
+<tr>
+<td>node()</td>
+<td>匹配任意类型的节点</td>
+</tr>
+</tbody></table>
+<h5 id="3-多路径匹配"><a href="#3-多路径匹配" class="headerlink" title="3) 多路径匹配"></a>3) 多路径匹配</h5><p>多个 Xpath 路径表达式可以同时使用，其语法如下：</p>
+<pre><code>xpath表达式1 | xpath表达式2 | xpath表达式3
+</code></pre>
+<h4 id="6-3-2Xpath内建函数"><a href="#6-3-2Xpath内建函数" class="headerlink" title="6.3.2Xpath内建函数"></a>6.3.2Xpath内建函数</h4><p>Xpath 提供 100 多个内建函数，这些函数给我们提供了很多便利，比如实现文本匹配、模糊匹配、以及位置匹配等，下面介绍几个常用的内建函数。</p>
+<table>
+<thead>
+<tr>
+<th>函数名称</th>
+<th>xpath表达式示例</th>
+<th>示例说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>text()</td>
+<td>./text()</td>
+<td>文本匹配，表示值取当前节点中的文本内容。</td>
+</tr>
+<tr>
+<td>contains()</td>
+<td>//div[contains(@id,’stu’)]</td>
+<td>模糊匹配，表示选择 id 中包含“stu”的所有 div 节点。</td>
+</tr>
+<tr>
+<td>last()</td>
+<td>//*[@class=’web’][last()]</td>
+<td>位置匹配，表示选择@class=’web’的最后一个节点。</td>
+</tr>
+<tr>
+<td>position()</td>
+<td>//*[@class=’site’][position()&lt;=2]</td>
+<td>位置匹配，表示选择@class=’site’的前两个节点。</td>
+</tr>
+<tr>
+<td>start-with()</td>
+<td>“//input[start-with(@id,’st’)]”</td>
+<td>匹配 id 以 st 开头的元素。</td>
+</tr>
+<tr>
+<td>ends-with()</td>
+<td>“//input[ends-with(@id,’st’)]”</td>
+<td>匹配 id 以 st 结尾的元素。</td>
+</tr>
+<tr>
+<td>concat(string1,string2)</td>
+<td>concat(‘C语言中文网’,.//*[@class=’stie’]/@href)</td>
+<td>C语言中文与标签类别属性为”stie”的 href 地址做拼接。</td>
+</tr>
+</tbody></table>
+<p>想要了解更多关于 Xpath 的知识可访问官方网站：<a target="_blank" rel="noopener" href="https://www.w3.org/TR/xpath/">https://www.w3.org/TR/xpath/</a></p>
+
                 
             </div>
             <hr/>
@@ -942,18 +1470,17 @@ ua <span class="token operator">=</span> UserAgent<span class="token punctuation
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/01/30/%E7%88%AC%E8%99%AB/">
+                <a href="/2022/02/11/ES6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="爬虫">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="ES6">
                         
-                        <span class="card-title">爬虫</span>
+                        <span class="card-title">ES6</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -963,9 +1490,9 @@ ua <span class="token operator">=</span> UserAgent<span class="token punctuation
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-30
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-02-11
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -974,16 +1501,15 @@ ua <span class="token operator">=</span> UserAgent<span class="token punctuation
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%88%AC%E8%99%AB/">
-                        <span class="chip bg-color">爬虫</span>
+                    <a href="/tags/%E5%89%8D%E7%AB%AF/">
+                        <span class="chip bg-color">前端</span>
                     </a>
                     
-                    <a href="/tags/Python/">
-                        <span class="chip bg-color">Python</span>
+                    <a href="/tags/ES6/">
+                        <span class="chip bg-color">ES6</span>
                     </a>
                     
                 </div>
