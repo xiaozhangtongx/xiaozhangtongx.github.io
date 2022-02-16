@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>query和params传参的区别</title>
+      <link href="/2022/02/16/query%E5%92%8Cparams%E4%BC%A0%E5%8F%82%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+      <url>/2022/02/16/query%E5%92%8Cparams%E4%BC%A0%E5%8F%82%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p><strong>参考资料</strong></p><p><a href="https://zhuanlan.zhihu.com/p/349408545">知乎Vue 中query和params的区别</a></p><p><a href="https://cloud.tencent.com/developer/article/1848975">腾讯云query和params的区别</a></p></blockquote><blockquote><ol><li><p>query 传统<strong>问号传参</strong>url 格式：xxx.com/product?id=123模板内获取数据：this.$route.<strong>query</strong>.id</p></li><li><p>params 动态路由匹配url 格式：xxx.com/product/123模板内获取数据：this.$route.<strong>params</strong>.id注意这个方式参数字段名 id 要在路由配置中定义 用冒号的形式标记参数可以继续拼接 /student/:id/:name/:age/:address他必须严格按照 url 的配置格式访问</p></li></ol></blockquote><h2 id="一、传参和接收参数"><a href="#一、传参和接收参数" class="headerlink" title="一、传参和接收参数"></a>一、传参和接收参数</h2><p>1、query</p><pre class=" language-js"><code class="language-js">传参<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>        path<span class="token punctuation">:</span><span class="token string">'/xxx'</span><span class="token punctuation">,</span>        query<span class="token punctuation">:</span><span class="token punctuation">{</span>          id<span class="token punctuation">:</span>id        <span class="token punctuation">}</span>      <span class="token punctuation">}</span><span class="token punctuation">)</span>  接收参数<span class="token punctuation">:</span><span class="token keyword">this</span><span class="token punctuation">.</span>$route<span class="token punctuation">.</span>query<span class="token punctuation">.</span>id</code></pre><blockquote><p>传参是this.$router,接收参数是this.$route。</p></blockquote><p>2、params</p><pre class=" language-js"><code class="language-js">传参<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$router<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>        name<span class="token punctuation">:</span><span class="token string">'xxx'</span><span class="token punctuation">,</span>        params<span class="token punctuation">:</span><span class="token punctuation">{</span>          id<span class="token punctuation">:</span>id        <span class="token punctuation">}</span>      <span class="token punctuation">}</span><span class="token punctuation">)</span>  接收参数<span class="token punctuation">:</span><span class="token keyword">this</span><span class="token punctuation">.</span>$route<span class="token punctuation">.</span>params<span class="token punctuation">.</span>id</code></pre><blockquote><p>params传参，push里面只能是 name:’xxxx’，不能是path:’/xxx’，<strong>因为params只能用name来引入路由，如果这里写成了path，接收参数页面会是undefined。</strong></p></blockquote><h2 id="二、路由设置"><a href="#二、路由设置" class="headerlink" title="二、路由设置"></a>二、路由设置</h2><p>使用params方法传参的时候，要在路由后面加参数名，而query方法，就没有这种限制。</p><pre class=" language-js"><code class="language-js">router<span class="token punctuation">.</span>js<span class="token punctuation">:</span><span class="token punctuation">{</span>    path<span class="token punctuation">:</span> <span class="token string">'/index/:id'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 接收参数的路由，使用params传参要加参数名，这里的id就是参数名</span>    name<span class="token punctuation">:</span> <span class="token string">'index'</span><span class="token punctuation">,</span>    component<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">'./view/index'</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">}</span></code></pre><blockquote><p>使用params方法，如果路由上面不写参数，也是可以传过去的，但不会在url上面显示出你的参数，并且当你跳到别的页面或者刷新页面的时候<strong>参数会丢失。</strong></p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 前端 </tag>
+            
+            <tag> Vue </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ES6</title>
       <link href="/2022/02/11/ES6/"/>
       <url>/2022/02/11/ES6/</url>
