@@ -480,7 +480,7 @@
 </ul>
 </blockquote>
 <h3 id="1-Symbol"><a href="#1-Symbol" class="headerlink" title="1.Symbol"></a>1.Symbol</h3><p>ES6 引入了一种新的原始数据类型<code>Symbol</code>，表示独一无二的值。它是 JavaScript 语言的第七种数据类型，前六种是：<code>undefined</code>、<code>null</code>、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）。</p>
-<h4 id="1-1-创建-Symbol"><a href="#1-1-创建-Symbol" class="headerlink" title="1.1 创建 Symbol"></a>1.1 创建 Symbol</h4><pre><code>const sym = Symbol(&#39;foo&#39;);
+<h4 id="1-1-创建-Symbol"><a href="#1-1-创建-Symbol" class="headerlink" title="1.1 创建 Symbol"></a>1.1 创建 Symbol</h4><pre class=" language-js"><code class="language-js"><span class="token keyword">const</span> sym <span class="token operator">=</span> <span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'foo'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>上面代码中，<code>sym</code>的描述就是字符串<code>foo</code>。</p>
 <pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 1.创建Symbol</span>
@@ -877,6 +877,68 @@ console<span class="token punctuation">.</span><span class="token function">log<
 <blockquote>
 <p>2、<strong>可以对Promise进行并行处理</strong></p>
 </blockquote>
+<h3 id="3-Class"><a href="#3-Class" class="headerlink" title="3.Class"></a>3.Class</h3><h4 id="3-1-class介绍与初体验"><a href="#3-1-class介绍与初体验" class="headerlink" title="3.1 class介绍与初体验"></a>3.1 class介绍与初体验</h4><blockquote>
+<p>class 可以理解为一个语法糖</p>
+</blockquote>
+<ul>
+<li><strong>类的声明</strong></li>
+</ul>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// ES5通过构造函数实例化实现</span>
+<span class="token keyword">function</span> <span class="token function">Phone</span><span class="token punctuation">(</span>brand<span class="token punctuation">,</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>brand <span class="token operator">=</span> brand
+  <span class="token keyword">this</span><span class="token punctuation">.</span>data <span class="token operator">=</span> data
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 添加方法</span>
+Phone<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>call <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'我能打电话'</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 实例化对象</span>
+<span class="token keyword">let</span> huawei <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Phone</span><span class="token punctuation">(</span><span class="token string">'华为'</span><span class="token punctuation">,</span> <span class="token number">5999</span><span class="token punctuation">)</span>
+huawei<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre class=" language-js"><code class="language-js"><span class="token comment" spellcheck="true">// ES6 class实现</span>
+<span class="token keyword">class</span> <span class="token class-name">Phone</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 构造方法</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span>brand<span class="token punctuation">,</span> price<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>brand <span class="token operator">=</span> brand
+    <span class="token keyword">this</span><span class="token punctuation">.</span>price <span class="token operator">=</span> price
+  <span class="token punctuation">}</span>
+    
+  <span class="token comment" spellcheck="true">// 添加方法</span>
+  <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'我能打电话'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">let</span> huawei <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Phone</span><span class="token punctuation">(</span><span class="token string">'华为'</span><span class="token punctuation">,</span> <span class="token number">5999</span><span class="token punctuation">)</span>
+huawei<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><strong>constructor 方法</strong></li>
+</ul>
+<p><code>constructor</code>方法是类的默认方法，通过<code>new</code>命令生成对象实例时，自动调用该方法。一个类必须有<code>constructor</code>方法，如果没有显式定义，一个空的<code>constructor</code>方法会被默认添加。</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">class</span> <span class="token class-name">Point</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 等同于</span>
+<span class="token keyword">class</span> <span class="token class-name">Point</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h4 id="3-2-静态方法"><a href="#3-2-静态方法" class="headerlink" title="3.2 静态方法"></a>3.2 静态方法</h4><p>类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上<code>static</code>关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为<strong>“静态方法”</strong>。</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">class</span> <span class="token class-name">Point</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 静态属性</span>
+  <span class="token keyword">static</span> name <span class="token operator">=</span> <span class="token string">'手机'</span>
+  <span class="token comment" spellcheck="true">// 静态方法</span>
+  <span class="token keyword">static</span> <span class="token function">change</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'我能改变世界'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">let</span> nokia <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Point</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>nokia<span class="token punctuation">.</span>name<span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">// undefined</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Point<span class="token punctuation">.</span>name<span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">// 手机</span>
+</code></pre>
+<p>注意，如果静态方法包含<code>this</code>关键字，这个<code>this</code>指的是类，而不是实例。</p>
 
                 
             </div>
