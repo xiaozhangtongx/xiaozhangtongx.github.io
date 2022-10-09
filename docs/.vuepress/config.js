@@ -11,7 +11,7 @@ module.exports = {
     author: 'xiaozhangtx',
     huawei: true,
     subSidebar: 'auto',
-    modePicker: false,
+    // modePicker: false,
     logo: 'https://avatars.githubusercontent.com/u/63902256?s=96&v=4',
     authorAvatar: 'https://avatars.githubusercontent.com/u/63902256?s=96&v=4',
     type: 'blog',
@@ -56,11 +56,19 @@ module.exports = {
   },
 
   plugins: [
-    'vuepress-plugin-baidu-autopush',
-    {
-      sitemap: {
-        hostname: 'http://www.xiaozhangtx.top/blog/',
+    [
+      '@vuepress/last-updated',
+      {
+        transformer: (timestamp, lang) => {
+          return new Date(timestamp).toLocaleDateString()
+        },
       },
-    },
+    ],
+    [
+      'sitemap',
+      {
+        hostname: 'https://www.xiaozhangtx.top/blog/',
+      },
+    ],
   ],
 }
