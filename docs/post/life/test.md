@@ -8,10 +8,6 @@ tags:
 sidebar: auto
 ---
 
-:::tip
-摘要测试
-:::
-
 # 一级标题测试
 
 - 序号测试
@@ -34,6 +30,8 @@ _斜体_
 
 ##### 五级标题测试
 
-![你愁啥！](../../assets/img/avatar.png)
+![干饭](../../../assets/img/eat.jpg)
 
-![你愁啥！](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJVvG2dod8Q8wNVxkKLypo6ok7DOvzXEE84w&usqp=CAU)
+![饭](../../../assets/img/rice.jpg)
+
+![我喜欢你](https://syimg.3dmgame.com/uploadimg/upload/image/20191128/20191128105203_40666.jpg)
