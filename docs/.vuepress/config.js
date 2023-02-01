@@ -5,6 +5,7 @@ module.exports = {
     ['link', { rel: 'icon', href: '/logo.png' }],
     ['meta', { name: 'baidu-site-verification', content: 'code-J3tsEHzLsK' }],
     ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1,user-scalable=no' }],
+    ['meta', { name: 'robots', content: 'index,follow' }],
   ],
   base: '/blog/',
   theme: 'reco',
@@ -22,7 +23,9 @@ module.exports = {
     logo: 'https://avatars.githubusercontent.com/u/63902256?s=96&v=4',
     authorAvatar: 'https://avatars.githubusercontent.com/u/63902256?s=96&v=4',
     type: 'blog',
-    lastUpdated: '上次更新', // string | boolean
+    lastUpdated: 'Last Updated',
+    activeHeaderLinks: false,
+    smoothScroll: true,
 
     // 博客配置
     blogConfig: {
@@ -61,11 +64,17 @@ module.exports = {
       appId: 'lJu6fdjFj8hdGFmLDjUAO5Dg-gzGzoHsz',
       appKey: 'oeTMFqi5WXonR5lodIfz047s',
     },
+  },
 
-    // markdown文本配置
-    markdown: {
-      lineNumbers: true,
-      externalLinks: { target: '_blank', rel: 'nofollow noopener noreferrer' },
+  // markdown文本配置
+  markdown: {
+    anchor: { permalink: false },
+    toc: { includeLevel: [1, 2] },
+    lineNumbers: true,
+    externalLinks: { target: '_blank', rel: 'nofollow noopener noreferrer' },
+    extendMarkdown: (md) => {
+      // 使用更多的 markdown-it 插件!
+      md.use(require('markdown-it-task-lists'))
     },
   },
 

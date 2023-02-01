@@ -35,7 +35,6 @@ Vue.set(vm.items, indexOfItem, newValue)
 // 方法二: 使用 Vue 可监测的数组变异方法: Array.prototype.splice
 
 vm.items.splice(indexOfItem, 1, newValue)
-复制代码
 ```
 
 ## 为什么有些数组的数据变更不能被 Vue 监测到
