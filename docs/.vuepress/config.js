@@ -6,8 +6,18 @@ module.exports = {
     ['meta', { name: 'baidu-site-verification', content: 'code-J3tsEHzLsK' }],
     ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1,user-scalable=no' }],
     ['meta', { name: 'robots', content: 'index,follow' }],
+    ['meta', { name: 'baidu-site-verification', content: 'code-J3tsEHzLsK' }],
+    ['meta', { name: '360-site-verification', content: '7e3908ecf8a083492f8d1f3b7a1417c5' }],
+    ['meta', { name: 'msvalidate.01', content: '24C8E07C9918ED23734A02FB3B35BD0F' }],
+    ['script', {}, `var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?57512c6c54d19a8b4f6e1842b9a0f9dc";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();`
+    ]
   ],
-  base: '/blog/',
   theme: 'reco',
   permalink: '/:year/:month/:day/:slug',
 
@@ -15,7 +25,6 @@ module.exports = {
   themeConfig: {
     // 全局设置
     author: 'xiaozhangtx',
-    huawei: true,
     nextLinks: true,
     prevLinks: true,
     subSidebar: 'auto',
@@ -39,10 +48,8 @@ module.exports = {
       },
       socialLinks: [
         // 信息栏展示社交信息
-        { icon: 'reco-github', link: 'https://github.com/xiaozhangtongx' },
         { icon: 'reco-mail', link: 'mailto:2446159171@qq.com' },
         { icon: 'reco-bilibili', link: 'https://space.bilibili.com/450589378' },
-        { icon: 'reco-zhihu', link: 'https://www.zhihu.com/people/zhang-ju-fu-62' },
         { icon: 'reco-csdn', link: 'https://blog.csdn.net/m0_46249601' },
         { icon: 'reco-juejin', link: 'https://juejin.cn/user/2524908394122888' },
       ],
@@ -53,9 +60,9 @@ module.exports = {
       { text: '首页', link: '/', icon: 'reco-home' },
       { text: '时间线', link: '/timeline/', icon: 'reco-date' },
       {
-        text: '旧版',
-        link: 'https://www.xiaozhangtx.top/',
-        icon: 'reco-blog',
+        text: 'GitHub',
+        link: 'https://github.com/xiaozhangtongx',
+        icon: 'reco-github',
       },
     ],
 
@@ -92,8 +99,18 @@ module.exports = {
     [
       'sitemap',
       {
-        hostname: 'https://www.xiaozhangtx.top/blog/',
+        hostname: 'https://www.xiaozhangtx.top',
       },
     ],
+    [
+      '@vuepress/pwa',
+      {
+        serviceWorker: true,
+        updatePopup: {
+          message: "发现新内容可用",
+          buttonText: "刷新"
+        }
+      }
+    ]
   ],
 }

@@ -1,2 +1,2 @@
-Sitemap: https://www.xiaozhangtx.top/blog/sitemap.xml
+Sitemap: https://www.xiaozhangtx.top/sitemap.xml
 User-agent: *
