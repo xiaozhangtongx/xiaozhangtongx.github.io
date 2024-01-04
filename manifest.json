@@ -1,0 +1,12 @@
+{
+    "name": "小张的生活馆",
+    "short_name": "xiaozhang blog",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "生活博客 技术总结 小张的生活馆 前端开发 小张同学",
+    "icons": [{
+      "src": "logo.png",
+      "sizes": "52x52",
+      "type": "image/png"
+    }]
+  }
